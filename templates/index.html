@@ -1,0 +1,1124 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Soporte SAMAI – Tecnología al servicio de la justicia administrativa</title>
+  <meta name="description"
+    content="Servicio de soporte especializado en el sistema SAMAI para Juzgados Administrativos de Tunja, Duitama y Sogamoso. Atención por Ing. Miguel Ángel Gutiérrez." />
+  <meta name="keywords"
+    content="SAMAI, soporte judicial, juzgados administrativos, Tunja, Duitama, Sogamoso, soporte tecnológico judicial" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/premium.css') }}" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+</head>
+
+<body>
+
+  <!-- ===== NAVBAR ===== -->
+  <nav class="navbar" id="navbar">
+    <div class="nav-container">
+      <a href="#inicio" class="nav-logo" id="nav-logo-link" style="display:flex;align-items:center;">
+        <img src="{{ url_for('static', filename='img/samai.png') }}" alt="Soporte SAMAI" style="height:40px;">
+      </a>
+
+      <ul class="nav-links" id="nav-links">
+        <li><a href="#inicio" class="nav-link">Inicio</a></li>
+        <li><a href="#servicios" class="nav-link">Servicios</a></li>
+        <li><a href="#proceso" class="nav-link">Proceso</a></li>
+        <li><a href="#cobertura" class="nav-link">Cobertura</a></li>
+        <li><a href="#confianza" class="nav-link">Confianza</a></li>
+        <li><a href="#faq" class="nav-link">FAQ</a></li>
+        <li><a href="#contacto" class="nav-link">Contacto</a></li>
+        <li><a href="#consulta-ticket" class="nav-link">Consultar ticket</a></li>
+        <li><a href="#ayudas" class="nav-link">Ayudas</a></li>
+        <li>
+          <a href="https://wa.me/573228758620?text=Hola%2C%20quiero%20solicitar%20soporte%20SAMAI.%20Quedo%20atento%20a%20la%20atenci%C3%B3n%20del%20Ing.%20Miguel%20%C3%81ngel%20Guti%C3%A9rrez."
+            target="_blank" rel="noopener" class="btn-whatsapp-nav" id="nav-whatsapp">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+              <path
+                d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z" />
+            </svg>
+            WhatsApp
+          </a>
+        </li>
+      </ul>
+
+      <button class="hamburger" id="hamburger" aria-label="Menú">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- ===== HERO ===== -->
+  <section class="hero" id="inicio">
+    <div class="hero-bg-grid"></div>
+    <div class="hero-orb hero-orb-1"></div>
+    <div class="hero-orb hero-orb-2"></div>
+
+    <div class="hero-container">
+      <div class="hero-content">
+        <div class="hero-badge">
+          <span class="badge-dot"></span>
+          Sistema SAMAI · Juzgados Administrativos
+        </div>
+
+        <h1 class="hero-title">
+          Soporte especializado<br />
+          <span class="hero-title-accent">SAMAI</span>
+        </h1>
+
+        <p class="hero-subtitle">
+          Atención a Juzgados Administrativos y usuarios externos. Solución ágil y profesional de incidencias,
+          orientación y acompañamiento digital en el aplicativo SAMAI.
+        </p>
+
+        <div class="hero-trust">
+          <div class="trust-avatar">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#3B82F6" stroke-width="1.5">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+              <circle cx="12" cy="7" r="4" />
+            </svg>
+          </div>
+          <span class="trust-text">Atención directa por el <strong>Ing. Miguel Ángel Gutiérrez</strong></span>
+        </div>
+
+        <div class="hero-actions">
+          <a href="#contacto" class="btn-primary" id="hero-btn-soporte">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+            </svg>
+            Solicitar soporte
+          </a>
+
+          <a href="#consulta-ticket" class="btn-consulta-hero">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="11" cy="11" r="8"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+            Consultar estado
+          </a>
+          <a href="https://wa.me/573228758620?text=Hola%2C%20quiero%20solicitar%20soporte%20SAMAI.%20Quedo%20atento%20a%20la%20atenci%C3%B3n%20del%20Ing.%20Miguel%20%C3%81ngel%20Guti%C3%A9rrez."
+            target="_blank" rel="noopener" class="btn-whatsapp" id="hero-btn-whatsapp">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+              <path
+                d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z" />
+            </svg>
+            Escribir por WhatsApp
+          </a>
+        </div>
+
+        <p class="hero-microcopy">
+          Respuesta en horario laboral · Solicitudes registradas · Atención personalizada
+        </p>
+
+        <div class="hero-stats">
+          <div class="stat-item">
+            <span class="stat-number">3</span>
+            <span class="stat-label">Ciudades cubiertas</span>
+          </div>
+          <div class="stat-divider"></div>
+          <div class="stat-item">
+            <span class="stat-number">8h</span>
+            <span class="stat-label">Atención diaria</span>
+          </div>
+          <div class="stat-divider"></div>
+          <div class="stat-item">
+            <span class="stat-number">L–V</span>
+            <span class="stat-label">Lunes a viernes</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="hero-visual" aria-hidden="true">
+        <div class="dashboard-mockup">
+          <div class="dash-header">
+            <div class="dash-dots">
+              <span class="dd dd-red"></span>
+              <span class="dd dd-yellow"></span>
+              <span class="dd dd-green"></span>
+            </div>
+            <span class="dash-title-bar">Sistema SAMAI — Panel de Gestión</span>
+          </div>
+          <div class="dash-body">
+            <div class="dash-sidebar">
+              <div class="dash-menu-item active">Dashboard</div>
+              <div class="dash-menu-item">Expedientes</div>
+              <div class="dash-menu-item">Usuarios</div>
+              <div class="dash-menu-item">Soporte</div>
+            </div>
+            <div class="dash-main">
+              <div class="dash-cards-row">
+                <div class="dash-card-mini blue">
+                  <span class="dcm-label">Atenciones realizadas</span>
+                  <span class="dcm-val">24</span>
+                </div>
+                <div class="dash-card-mini green">
+                  <span class="dcm-label">Casos resueltos</span>
+                  <span class="dcm-val">19</span>
+                </div>
+                <div class="dash-card-mini blue">
+                  <span class="dcm-label">Seguimiento activo</span>
+                  <span class="dcm-val">5</span>
+                </div>
+              </div>
+
+              <div class="dash-chart-area">
+                <div class="chart-label">Actividad de atención</div>
+                <div class="chart-bars">
+                  <div class="chart-bar" style="--h:55%"><span>L</span></div>
+                  <div class="chart-bar" style="--h:80%"><span>M</span></div>
+                  <div class="chart-bar" style="--h:65%"><span>X</span></div>
+                  <div class="chart-bar" style="--h:90%"><span>J</span></div>
+                  <div class="chart-bar" style="--h:45%"><span>V</span></div>
+                </div>
+              </div>
+
+              <div class="dash-ticket-list">
+                <div class="dticket">
+                  <span class="dt-status resolved"></span>
+                  <span class="dt-text">Atención completada – Tunja</span>
+                </div>
+                <div class="dticket">
+                  <span class="dt-status pending"></span>
+                  <span class="dt-text">Seguimiento en curso – Duitama</span>
+                </div>
+                <div class="dticket">
+                  <span class="dt-status resolved"></span>
+                  <span class="dt-text">Orientación finalizada – Sogamoso</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="hero-glow-ring"></div>
+      </div>
+    </div>
+  </section>
+
+
+  <section class="section-trust-strip">
+    <div class="container">
+      <div class="trust-strip">
+        <div class="trust-chip">Soporte especializado en SAMAI</div>
+        <div class="trust-chip">Cobertura en Tunja, Duitama y Sogamoso</div>
+        <div class="trust-chip">Atención a usuarios externos</div>
+        <div class="trust-chip">Registro y seguimiento de solicitudes</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== SERVICIOS ===== -->
+  <section class="section-services" id="servicios">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-tag">Nuestros servicios</div>
+        <h2 class="section-title">Soporte integral para el<br /><span class="accent">sistema SAMAI</span></h2>
+        <p class="section-subtitle">Atención especializada en todos los procesos tecnológicos de los Juzgados
+          Administrativos y usuarios externos.</p>
+      </div>
+
+      <div class="services-grid">
+        <div class="service-card">
+          <div class="sc-icon-wrap">
+            <div class="sc-icon sc-icon-blue">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                <path d="M9 12l2 2 4-4" />
+              </svg>
+            </div>
+          </div>
+          <div class="sc-body">
+            <h3 class="sc-title">Soporte técnico en SAMAI</h3>
+            <p class="sc-desc">Asistencia directa en el sistema SAMAI: accesos, configuraciones, errores del sistema y
+              funcionamiento del aplicativo.</p>
+          </div>
+          <div class="sc-accent-line"></div>
+        </div>
+
+        <div class="service-card">
+          <div class="sc-icon-wrap">
+            <div class="sc-icon sc-icon-indigo">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                <circle cx="9" cy="7" r="4" />
+                <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+                <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+              </svg>
+            </div>
+          </div>
+          <div class="sc-body">
+            <h3 class="sc-title">Orientación a usuarios externos</h3>
+            <p class="sc-desc">Guía y acompañamiento para usuarios externos que requieren interactuar con el aplicativo
+              SAMAI y servicios digitales judiciales.</p>
+          </div>
+          <div class="sc-accent-line"></div>
+        </div>
+
+        <div class="service-card">
+          <div class="sc-icon-wrap">
+            <div class="sc-icon sc-icon-cyan">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
+              </svg>
+            </div>
+          </div>
+          <div class="sc-body">
+            <h3 class="sc-title">Solución de incidencias tecnológicas</h3>
+            <p class="sc-desc">Diagnóstico y resolución ágil de fallas, errores de acceso, problemas de conectividad y
+              fallos en procesos digitales judiciales.</p>
+          </div>
+          <div class="sc-accent-line"></div>
+        </div>
+
+        <div class="service-card">
+          <div class="sc-icon-wrap">
+            <div class="sc-icon sc-icon-blue">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <rect x="2" y="3" width="20" height="14" rx="2" />
+                <line x1="8" y1="21" x2="16" y2="21" />
+                <line x1="12" y1="17" x2="12" y2="21" />
+              </svg>
+            </div>
+          </div>
+          <div class="sc-body">
+            <h3 class="sc-title">Acompañamiento en plataforma SAMAI</h3>
+            <p class="sc-desc">Soporte y orientación en el uso del aplicativo SAMAI y su operación diaria.</p>
+          </div>
+          <div class="sc-accent-line"></div>
+        </div>
+
+        <div class="service-card">
+          <div class="sc-icon-wrap">
+            <div class="sc-icon sc-icon-indigo">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M9 11l3 3L22 4" />
+                <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11" />
+              </svg>
+            </div>
+          </div>
+          <div class="sc-body">
+            <h3 class="sc-title">Gestión de solicitudes de soporte</h3>
+            <p class="sc-desc">Registro, seguimiento y resolución organizada de solicitudes de soporte de despachos
+              judiciales y usuarios externos.</p>
+          </div>
+          <div class="sc-accent-line"></div>
+        </div>
+
+        <div class="service-card">
+          <div class="sc-icon-wrap">
+            <div class="sc-icon sc-icon-cyan">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <circle cx="12" cy="12" r="3" />
+                <path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14" />
+              </svg>
+            </div>
+          </div>
+          <div class="sc-body">
+            <h3 class="sc-title">Asistencia tecnológica institucional</h3>
+            <p class="sc-desc">Apoyo tecnológico integral para despachos judiciales administrativos: herramientas
+              digitales, procesos y sistemas institucionales.</p>
+          </div>
+          <div class="sc-accent-line"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== PROCESO ===== -->
+  <section class="section-process" id="proceso">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-tag">Proceso de atención</div>
+        <h2 class="section-title">¿Cómo funciona el <span class="accent">soporte</span>?</h2>
+        <p class="section-subtitle">Un proceso claro y organizado para registrar, analizar y dar seguimiento a cada
+          solicitud.</p>
+      </div>
+
+      <div class="process-grid">
+        <div class="process-card reveal">
+          <div class="process-step">01</div>
+          <div class="process-icon">💬</div>
+          <h3 class="process-title">Registras tu solicitud</h3>
+          <p class="process-desc">Diligencias el formulario o nos contactas por WhatsApp con la información básica del
+            caso.</p>
+        </div>
+
+        <div class="process-card reveal">
+          <div class="process-step">02</div>
+          <div class="process-icon">🔎</div>
+          <h3 class="process-title">Analizamos el requerimiento</h3>
+          <p class="process-desc">Revisamos si se trata de acceso, incidencia técnica, orientación o acompañamiento en
+            plataforma.</p>
+        </div>
+
+        <div class="process-card reveal">
+          <div class="process-step">03</div>
+          <div class="process-icon">✅</div>
+          <h3 class="process-title">Te damos solución o seguimiento</h3>
+          <p class="process-desc">Atendemos el caso y dejamos trazabilidad de la solicitud para un seguimiento más
+            organizado.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== COBERTURA ===== -->
+  <section class="section-coverage" id="cobertura">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-tag">Área de cobertura</div>
+        <h2 class="section-title">Cobertura especializada para<br /><span class="accent">Juzgados Administrativos</span>
+        </h2>
+        <p class="section-subtitle">Aplicativo SAMAI</p>
+      </div>
+
+      <div class="coverage-grid">
+        <div class="coverage-card">
+          <div class="cov-map-icon">📍</div>
+          <h3 class="cov-city">Tunja</h3>
+          <p class="cov-desc">Sede principal de soporte SAMAI. Gestión de incidencias, accesos y acompañamiento
+            funcional.</p>
+          <div class="cov-tag">Juzgados Administrativos</div>
+        </div>
+
+        <div class="coverage-card">
+          <div class="cov-map-icon">📍</div>
+          <h3 class="cov-city">Duitama</h3>
+          <p class="cov-desc">Atención a despachos judiciales. Soporte técnico y orientación en el uso del sistema
+            SAMAI.</p>
+          <div class="cov-tag">Juzgados Administrativos</div>
+        </div>
+
+        <div class="coverage-card">
+          <div class="cov-map-icon">📍</div>
+          <h3 class="cov-city">Sogamoso</h3>
+          <p class="cov-desc">Acompañamiento en procesos judiciales digitales y solución de incidencias en plataforma
+            SAMAI.</p>
+          <div class="cov-tag">Juzgados Administrativos</div>
+        </div>
+
+        <div class="coverage-card coverage-external">
+          <div class="cov-map-icon">🌐</div>
+          <h3 class="cov-city">Usuarios Externos</h3>
+          <p class="cov-desc">Orientación para ciudadanos y abogados en el uso del aplicativo SAMAI. Atención virtual
+            disponible para acompañamiento en tiempo real.</p>
+          <a id="btn-teams"
+            href="https://teams.microsoft.com/l/meetup-join/19%3ameeting_NzJlYWRlYmQtNWM1YS00YjMwLTkxYmUtNTFlNzI1ODVmOWZk%40thread.v2/0?context=%7b%22Tid%22%3a%22622cba98-80f8-41f3-8df5-8eb99901598b%22%2c%22Oid%22%3a%229d649d6d-6268-4423-87ed-9adfa0aa9896%22%7d"
+            target="_blank" class="cov-tag cov-tag-alt">Verificando
+            disponibilidad...</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== CONFIANZA ===== -->
+  <section class="section-trust" id="confianza">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-tag">Atención institucional</div>
+        <h2 class="section-title">Atención confiable y <span class="accent">organizada</span></h2>
+        <p class="section-subtitle">Un servicio orientado a registrar, gestionar y dar seguimiento a solicitudes de
+          soporte de forma clara y profesional.</p>
+      </div>
+
+      <div class="trust-grid">
+        <div class="trust-card reveal">
+          <div class="trust-card-icon">👤</div>
+          <h3 class="trust-card-title">Atención personalizada</h3>
+          <p class="trust-card-desc">Soporte brindado con un enfoque claro, profesional y orientado a cada caso.</p>
+        </div>
+
+        <div class="trust-card reveal">
+          <div class="trust-card-icon">📋</div>
+          <h3 class="trust-card-title">Solicitudes registradas</h3>
+          <p class="trust-card-desc">Cada requerimiento queda organizado y trazable para facilitar su seguimiento.</p>
+        </div>
+
+        <div class="trust-card reveal">
+          <div class="trust-card-icon">📌</div>
+          <h3 class="trust-card-title">Seguimiento del caso</h3>
+          <p class="trust-card-desc">El estado de cada solicitud puede gestionarse de forma ordenada y consistente.</p>
+        </div>
+
+        <div class="trust-card reveal">
+          <div class="trust-card-icon">🗺️</div>
+          <h3 class="trust-card-title">Cobertura regional</h3>
+          <p class="trust-card-desc">Atención enfocada en Tunja, Duitama, Sogamoso y usuarios externos dentro del
+            alcance del servicio.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== HORARIO ===== -->
+  <section class="section-schedule" id="horario">
+    <div class="container">
+      <div class="schedule-wrapper">
+        <div class="schedule-left">
+          <div class="section-tag">Horario de atención</div>
+          <h2 class="schedule-title">Disponibles para<br /><span class="accent">atenderte</span></h2>
+          <p class="schedule-sub">Soporte presencial y virtual con atención personalizada de lunes a viernes en horario
+            laboral.</p>
+          <a href="#contacto" class="btn-primary-sm" id="schedule-btn-contact">Solicitar soporte ahora</a>
+        </div>
+        <div class="schedule-right">
+          <div class="schedule-card">
+            <div class="sch-day-label">Lunes a Viernes</div>
+            <div class="sch-times">
+              <div class="sch-time-block">
+                <div class="sch-time-info">
+                  <span class="sch-label">Mañana</span>
+                  <span class="sch-time">8:00 a.m. – 12:00 m.</span>
+                </div>
+              </div>
+              <div class="sch-divider"><span>·</span></div>
+              <div class="sch-time-block">
+                <div class="sch-time-info">
+                  <span class="sch-label">Tarde</span>
+                  <span class="sch-time">1:00 p.m. – 5:00 p.m.</span>
+                </div>
+              </div>
+            </div>
+            <div class="sch-closed">Sábados, domingos y festivos: no hay atención</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FAQ ===== -->
+  <section class="section-faq" id="faq">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-tag">Preguntas frecuentes</div>
+        <h2 class="section-title">Resolvemos tus <span class="accent">dudas más comunes</span></h2>
+        <p class="section-subtitle">Información clave sobre el alcance del soporte, horarios y forma de atención.</p>
+      </div>
+
+      <div class="faq-list">
+        <details class="faq-item reveal">
+          <summary><span>¿Quién puede solicitar soporte?</span><span class="faq-icon">⌄</span></summary>
+          <div class="faq-content">Pueden solicitar soporte los Juzgados Administrativos cubiertos y los usuarios
+            externos que requieran orientación sobre el uso de plataformas judiciales.</div>
+        </details>
+
+        <details class="faq-item reveal">
+          <summary><span>¿Qué tipo de casos se atienden?</span><span class="faq-icon">⌄</span></summary>
+          <div class="faq-content">Se atienden solicitudes relacionadas con acceso a plataforma, incidencias técnicas,
+            orientación funcional y acompañamiento en el aplicativo SAMAI.</div>
+        </details>
+
+        <details class="faq-item reveal">
+          <summary><span>¿La atención es virtual o presencial?</span><span class="faq-icon">⌄</span></summary>
+          <div class="faq-content">La atención puede brindarse de forma virtual y, según el caso, con acompañamiento
+            directo dentro del alcance del servicio.</div>
+        </details>
+
+        <details class="faq-item reveal">
+          <summary><span>¿Cuál es el horario de atención?</span><span class="faq-icon">⌄</span></summary>
+          <div class="faq-content">La atención se presta en horario laboral, de lunes a viernes, en las franjas
+            establecidas para soporte.</div>
+        </details>
+
+        <details class="faq-item reveal">
+          <summary><span>¿Cómo puedo reportar un inconveniente?</span><span class="faq-icon">⌄</span></summary>
+          <div class="faq-content">Puedes registrar tu solicitud desde el formulario o escribir directamente por
+            WhatsApp con una breve descripción del caso.</div>
+        </details>
+
+        <details class="faq-item reveal">
+          <summary><span>¿Qué información debo tener lista antes de solicitar soporte?</span><span
+              class="faq-icon">⌄</span></summary>
+          <div class="faq-content">Ten a la mano tu nombre, correo, teléfono, ciudad, entidad o despacho, asunto del
+            caso y una descripción clara del inconveniente.</div>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== AYUDAS RÁPIDAS ===== -->
+  <!-- ===== AYUDAS ULTRA PRO CON VISTA PREVIA ===== -->
+  <section class="section-help-ultra" id="ayudas">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-tag">Centro de ayuda</div>
+        <h2 class="section-title">Guías rápidas <span class="accent">SAMAI</span></h2>
+        <p class="section-subtitle">
+          Aprende paso a paso cómo solicitar acceso, registrarte y consultar información en la plataforma.
+        </p>
+      </div>
+
+      <div class="help-ultra-grid">
+
+        <!-- PASO 1 -->
+        <article class="help-ultra-card reveal">
+          <div class="help-ultra-media help-ultra-video-preview">
+            <span class="help-ultra-badge">Acceso</span>
+            <video controls preload="metadata" class="help-ultra-inline-video">
+              <source
+                src="https://www.consejodeestado.gov.co/manuales/manualsujetos/wp-content/uploads/2021/04/Solicitud-Acceso-Expedientes-2.mp4"
+                type="video/mp4">
+              Tu navegador no soporta video HTML5.
+            </video>
+          </div>
+
+          <div class="help-ultra-body">
+            <h3 class="help-ultra-title">Cómo solicitar acceso al expediente</h3>
+            <p class="help-ultra-desc">
+              Aprende cómo pedir acceso al expediente ante el despacho judicial para continuar el proceso en SAMAI.
+            </p>
+
+            <div class="help-ultra-actions">
+              <button type="button" class="btn-primary-sm open-help-modal" data-modal-type="mp4"
+                data-modal-src="https://www.consejodeestado.gov.co/manuales/manualsujetos/wp-content/uploads/2021/04/Solicitud-Acceso-Expedientes-2.mp4"
+                data-modal-title="Cómo solicitar acceso al expediente">
+                Ver grande
+              </button>
+
+              <a href="https://www.consejodeestado.gov.co/manuales/manualsujetos/wp-content/uploads/2021/04/Solicitud-Acceso-Expedientes-2.mp4"
+                target="_blank" rel="noopener" class="btn-primary-sm help-ultra-secondary">
+                Abrir video
+              </a>
+            </div>
+
+            <p class="help-ultra-note">Guía oficial para usuarios externos</p>
+          </div>
+        </article>
+
+        <!-- PASO 2 -->
+        <article class="help-ultra-card reveal">
+          <div class="help-ultra-media help-ultra-video-preview">
+            <span class="help-ultra-badge">Registro</span>
+            <video controls preload="metadata" class="help-ultra-inline-video">
+              <source
+                src="https://www.consejodeestado.gov.co/manuales/manualsujetos/wp-content/uploads/2021/03/registroUsuarioExterno.mp4"
+                type="video/mp4">
+              Tu navegador no soporta video HTML5.
+            </video>
+          </div>
+
+          <div class="help-ultra-body">
+            <h3 class="help-ultra-title">Crear usuario en la plataforma SAMAI</h3>
+            <p class="help-ultra-desc">
+              Registra tu usuario después de tener el acceso autorizado para ingresar al sistema.
+            </p>
+
+            <div class="help-ultra-actions">
+              <button type="button" class="btn-primary-sm open-help-modal" data-modal-type="mp4"
+                data-modal-src="https://www.consejodeestado.gov.co/manuales/manualsujetos/wp-content/uploads/2021/03/registroUsuarioExterno.mp4"
+                data-modal-title="Crear usuario en SAMAI">
+                Ver grande
+              </button>
+
+              <a href="https://www.consejodeestado.gov.co/manuales/manualsujetos/wp-content/uploads/2021/03/registroUsuarioExterno.mp4"
+                target="_blank" rel="noopener" class="btn-primary-sm help-ultra-secondary">
+                Abrir video
+              </a>
+            </div>
+
+            <p class="help-ultra-note">Guía oficial para registro de usuarios externos</p>
+          </div>
+        </article>
+
+        <!-- PASO 3 -->
+        <article class="help-ultra-card reveal">
+          <div class="help-ultra-media help-ultra-media-info">
+            <div class="help-ultra-gradient"></div>
+            <span class="help-ultra-badge">Consulta</span>
+            <div class="help-ultra-icon-box">
+              <svg width="52" height="52" viewBox="0 0 24 24" fill="none" stroke="#60A5FA" stroke-width="1.6">
+                <rect x="3" y="4" width="18" height="14" rx="2"></rect>
+                <line x1="8" y1="20" x2="16" y2="20"></line>
+                <line x1="12" y1="18" x2="12" y2="20"></line>
+              </svg>
+            </div>
+          </div>
+
+          <div class="help-ultra-body">
+            <h3 class="help-ultra-title">Consultar expediente completo</h3>
+            <p class="help-ultra-desc">
+              Ingresa con tu usuario y revisa la información habilitada del expediente autorizado dentro del sistema.
+            </p>
+
+            <div class="help-ultra-actions">
+              <a href="#contacto" class="btn-primary-sm">
+                Solicitar ayuda
+              </a>
+
+              <a href="#faq" class="btn-primary-sm help-ultra-secondary">
+                Ver preguntas
+              </a>
+            </div>
+
+            <p class="help-ultra-note">Disponible una vez el acceso sea autorizado por el juzgado</p>
+          </div>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== MODAL AYUDAS ===== -->
+  <div class="help-ultra-modal" id="help-ultra-modal" aria-hidden="true">
+    <div class="help-ultra-backdrop" id="help-ultra-backdrop"></div>
+
+    <div class="help-ultra-dialog" role="dialog" aria-modal="true" aria-labelledby="help-ultra-modal-title">
+      <div class="help-ultra-header">
+        <h3 id="help-ultra-modal-title">Video de ayuda</h3>
+        <button type="button" class="help-ultra-close" id="help-ultra-close" aria-label="Cerrar">✕</button>
+      </div>
+
+      <div class="help-ultra-content" id="help-ultra-content"></div>
+
+      <div class="help-ultra-footer">
+        <a href="#" target="_blank" rel="noopener" id="help-ultra-external-link" class="btn-primary-sm">
+          Abrir en otra pestaña
+        </a>
+      </div>
+    </div>
+  </div>
+  <!-- ===== CONTACTO ===== -->
+  <section class="section-contact" id="contacto">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-tag">Contacto y soporte</div>
+        <h2 class="section-title">Solicita atención<br /><span class="accent">especializada</span></h2>
+        <p class="section-subtitle">Atención personalizada por el Ing. Miguel Ángel Gutiérrez para Juzgados
+          Administrativos y usuarios externos.</p>
+      </div>
+
+      <div class="contact-grid">
+        <div class="contact-info">
+          <div class="contact-card-person">
+            <div class="person-avatar">👨‍💼</div>
+            <div class="person-info">
+              <span class="person-name">Ing. Miguel Ángel Gutiérrez</span>
+              <span class="person-role">Especialista en Soporte SAMAI</span>
+            </div>
+          </div>
+
+          <div class="info-item">
+            <div class="info-icon">📍</div>
+            <div class="info-text">
+              <span class="info-label">Cobertura</span>
+              <span class="info-value">Tunja · Duitama · Sogamoso · Usuarios externos</span>
+            </div>
+          </div>
+
+          <div class="info-item">
+            <div class="info-icon">🕒</div>
+            <div class="info-text">
+              <span class="info-label">Horario de atención</span>
+              <span class="info-value">Lunes a viernes<br />8:00 a.m. – 12:00 m. · 1:00 p.m. – 5:00 p.m.</span>
+            </div>
+          </div>
+
+          <a href="https://wa.me/573228758620?text=Hola%2C%20quiero%20solicitar%20soporte%20SAMAI.%20Quedo%20atento%20a%20la%20atenci%C3%B3n%20del%20Ing.%20Miguel%20%C3%81ngel%20Guti%C3%A9rrez."
+            target="_blank" rel="noopener" class="btn-whatsapp btn-whatsapp-lg" id="contact-btn-whatsapp">
+            Escribir por WhatsApp
+          </a>
+        </div>
+
+        <div class="contact-form-wrap">
+          <form class="support-form" id="support-form" novalidate>
+            <h3 class="form-title">Formulario de solicitud de soporte</h3>
+
+            <div class="form-group">
+              <label for="tipo_solicitud">Tipo de solicitud <span class="req">*</span></label>
+              <select id="tipo_solicitud" name="tipo_solicitud" required>
+                <option value="Solicitud general" selected>Solicitud general</option>
+                <option value="Envío de memorial">Envío de memorial</option>
+              </select>
+            </div>
+
+            <div id="memorial-warning"
+              style="display:none;background:#FEF3C7;border:1px solid #F59E0B;border-radius:8px;padding:14px 18px;margin-bottom:18px;">
+              <p style="margin:0;color:#92400E;font-size:13px;line-height:1.5;"><strong>⚠️ Aviso importante:</strong>
+                Este campo es exclusivo cuando la plataforma SAMAI presenta fallas o el archivo supera el peso
+                permitido. En condiciones normales, use SAMAI directamente.</p>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="nombre">Nombre completo <span class="req">*</span></label>
+                <input type="text" id="nombre" name="nombre" placeholder="Su nombre completo" required
+                  autocomplete="name" />
+              </div>
+              <div class="form-group">
+                <label for="correo">Correo electrónico <span class="req">*</span></label>
+                <input type="email" id="correo" name="correo" placeholder="correo@ejemplo.com" required
+                  autocomplete="email" />
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="telefono">Teléfono / Celular <span class="req">*</span></label>
+                <input type="tel" id="telefono" name="telefono" placeholder="Ej: 311 000 0000" required
+                  autocomplete="tel" />
+              </div>
+              <div class="form-group">
+                <label for="ciudad">Ciudad <span class="req">*</span></label>
+                <select id="ciudad" name="ciudad" required>
+                  <option value="" disabled selected>Seleccione la ciudad</option>
+                  <option value="Tunja">Tunja</option>
+                  <option value="Duitama">Duitama</option>
+                  <option value="Sogamoso">Sogamoso</option>
+                  <option value="Otra">Otra</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="despacho">Despacho o juzgado <span class="req">*</span></label>
+                <select id="despacho" name="despacho" required>
+                  <option value="" disabled selected>Seleccione despacho</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="tipo_usuario">Tipo de usuario <span class="req">*</span></label>
+                <select id="tipo_usuario" name="tipo_usuario" required>
+                  <option value="" disabled selected>Seleccione el tipo</option>
+                  <option value="Juzgado Administrativo">Juzgado Administrativo</option>
+                  <option value="Usuario Externo">Usuario Externo</option>
+                  <option value="Otro">Otro</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="asunto">Asunto de la solicitud <span class="req">*</span></label>
+              <input type="text" id="asunto" name="asunto" placeholder="Ej: Error de acceso al sistema SAMAI"
+                required />
+            </div>
+
+            <div class="form-group">
+              <label for="radicado">Número de proceso (Radicado)</label>
+              <input type="text" id="radicado" name="radicado" placeholder="Ej: 15001-33-33-001-2026-00012-00" />
+            </div>
+
+            <div class="form-group">
+              <label for="descripcion">Descripción detallada <span class="req">*</span></label>
+              <textarea id="descripcion" name="descripcion" rows="4"
+                placeholder="Describa con detalle el problema o requerimiento de soporte..." required></textarea>
+            </div>
+
+            <div id="memorial-fields" style="display:none;">
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="quien_radica">Quien radica</label>
+                  <input type="text" id="quien_radica" name="quien_radica"
+                    placeholder="Nombre de quien presenta el memorial" />
+                </div>
+                <div class="form-group">
+                  <label for="tipo_memorial">Tipo de memorial</label>
+                  <select id="tipo_memorial" name="tipo_memorial">
+                    <option value="" disabled selected>Seleccione tipo</option>
+                    <option value="Demanda">Demanda</option>
+                    <option value="Memorial">Memorial</option>
+                    <option value="Respuesta">Respuesta</option>
+                    <option value="Prueba">Prueba</option>
+                    <option value="Otro">Otro</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="archivo_memorial">Adjuntar archivo <span style="color:#94A3B8;font-weight:400;font-size:12px;">(m&aacute;x 10 MB &middot; PDF, DOC, JPG, PNG)</span></label>
+                <input type="file" id="archivo_memorial" name="archivo" accept=".pdf,.doc,.docx,.jpg,.png"
+                  style="padding:10px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:8px;color:#CBD5E1;width:100%;" />
+                <div id="archivo-error" style="display:none;color:#EF4444;font-size:12px;margin-top:6px;">⚠️ El archivo supera 10 MB. Use el campo de enlace para archivos grandes.</div>
+              </div>
+
+              <div class="form-group">
+                <label for="link_drive">Enlace de archivos grandes <span style="color:#94A3B8;font-weight:400;font-size:12px;">(Google Drive, WeTransfer, etc.)</span></label>
+                <input type="text" id="link_drive" name="link_drive"
+                  placeholder="Para archivos grandes o cuando SAMAI est&eacute; ca&iacute;do, pegue el enlace aqu&iacute;" />
+                <p style="margin:6px 0 0;color:#64748B;font-size:11px;">Use este campo si el archivo supera 10 MB o la plataforma SAMAI presenta fallas.</p>
+              </div>
+            </div>
+
+            <div class="form-actions">
+              <button type="submit" class="btn-submit" id="form-submit-btn">
+                Enviar solicitud de soporte
+              </button>
+            </div>
+
+            <div class="form-success" id="form-success" style="display:none;">
+              <div class="success-icon">✅</div>
+              <p class="success-title">¡Solicitud enviada con éxito!</p>
+              <p class="success-msg">Tu solicitud fue enviada correctamente. Pronto recibirás atención por parte del
+                <strong>Ing. Miguel Ángel Gutiérrez</strong>.
+              </p>
+            </div>
+
+            <div class="form-error" id="form-error" style="display:none;">
+              <span id="form-error-msg">Ocurrió un error al enviar. Por favor intente nuevamente.</span>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== CONSULTA DE TICKET ===== -->
+  <section class="section-ticket" id="consulta-ticket">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-tag">Consulta de estado</div>
+        <h2 class="section-title">Consulta tu <span class="accent">ticket de soporte</span></h2>
+        <p class="section-subtitle">
+          Ingresa el número de ticket asignado para conocer el estado actual de tu solicitud.
+        </p>
+      </div>
+
+      <div class="ticket-panel">
+        <form id="ticket-form" class="ticket-form" novalidate>
+          <div class="ticket-form-row">
+            <input type="text" id="ticket-input" name="ticket" placeholder="Ej: SAMAI-2026-0001" autocomplete="off" />
+            <button type="submit" class="btn-primary">Consultar ticket</button>
+          </div>
+        </form>
+
+        <div id="ticket-result" class="ticket-result" style="display:none;"></div>
+        <div id="ticket-error" class="form-error" style="display:none;"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== CTA FINAL ===== -->
+  <section class="section-cta" id="cta">
+    <div class="cta-bg-grid"></div>
+    <div class="cta-orb"></div>
+    <div class="container">
+      <div class="cta-content">
+        <div class="cta-badge">Soporte especializado disponible</div>
+        <h2 class="cta-title">Solicita soporte para<br />el sistema <span class="accent">SAMAI</span></h2>
+        <p class="cta-subtitle">Atención tecnológica especializada para Juzgados Administrativos y usuarios externos.
+          Respuesta ágil y profesional.</p>
+        <div class="cta-actions">
+          <a href="#contacto" class="btn-primary btn-lg" id="cta-btn-soporte">Solicitar soporte</a>
+          <a href="https://wa.me/573228758620?text=Hola%2C%20quiero%20solicitar%20soporte%20SAMAI.%20Quedo%20atento%20a%20la%20atenci%C3%B3n%20del%20Ing.%20Miguel%20%C3%81ngel%20Guti%C3%A9rrez."
+            target="_blank" rel="noopener" class="btn-whatsapp btn-lg" id="cta-btn-whatsapp">
+            Abrir WhatsApp
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- ===== PANEL ADMIN ===== -->
+  <!-- ===== PANEL ADMIN ===== -->
+  <section class="section-admin" id="panel-admin">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-tag">Panel administrativo</div>
+        <h2 class="section-title">Dashboard <span class="accent">SAMAI Empresa</span></h2>
+        <p class="section-subtitle">
+          Acceso interno con roles para consulta y administración de tickets.
+        </p>
+      </div>
+
+      <div class="admin-card">
+        <form id="admin-login-form" class="admin-login-form">
+          <div class="admin-login-grid">
+            <input type="text" id="admin-username" placeholder="Usuario" autocomplete="off" />
+            <input type="password" id="admin-password" placeholder="Contraseña del panel" autocomplete="off" />
+            <button type="submit" class="btn-primary">Ingresar</button>
+          </div>
+        </form>
+
+        <div id="admin-login-msg" class="form-error" style="display:none;"></div>
+
+        <div id="admin-dashboard" style="display:none;">
+          <div class="admin-topbar">
+            <div class="admin-filters">
+              <input type="text" id="admin-search" placeholder="Buscar por ticket, nombre, asunto, radicado o ciudad"
+                autocomplete="off" />
+
+              <select id="admin-filter-status">
+                <option value="Todos">Todos los estados</option>
+                <option value="Pendiente">Pendiente</option>
+                <option value="En proceso">En proceso</option>
+                <option value="Resuelto">Resuelto</option>
+              </select>
+            </div>
+
+            <div class="admin-actions">
+              <span id="admin-role-badge" class="estado-badge estado-proceso">Rol</span>
+              <button type="button" id="admin-close-panel-btn" class="btn-primary admin-close-btn">
+                Cerrar panel
+              </button>
+              <button type="button" id="admin-logout-btn" class="btn-primary admin-logout-btn">
+                Cerrar sesión
+              </button>
+            </div>
+          </div>
+
+          <div class="admin-stats-grid">
+            <div class="admin-stat-box">
+              <span class="admin-stat-label">Total tickets</span>
+              <span class="admin-stat-value" id="stat-total">0</span>
+            </div>
+            <div class="admin-stat-box">
+              <span class="admin-stat-label">Pendientes</span>
+              <span class="admin-stat-value" id="stat-pendientes">0</span>
+            </div>
+            <div class="admin-stat-box">
+              <span class="admin-stat-label">En proceso</span>
+              <span class="admin-stat-value" id="stat-proceso">0</span>
+            </div>
+            <div class="admin-stat-box">
+              <span class="admin-stat-label">Resueltos</span>
+              <span class="admin-stat-value" id="stat-resueltos">0</span>
+            </div>
+            <div class="admin-stat-box admin-stat-box-accent">
+              <span class="admin-stat-label">% resolución</span>
+              <span class="admin-stat-value" id="stat-resolucion">0%</span>
+            </div>
+          </div>
+
+          <div class="admin-report-grid" style="margin-bottom:2rem;">
+            <div class="admin-report-card" style="display:flex;flex-direction:column;align-items:center;">
+              <h3 class="admin-report-title">Estado de tickets</h3>
+              <div style="max-width:280px;width:100%;">
+                <canvas id="chart-estado"></canvas>
+              </div>
+            </div>
+            <div class="admin-report-card" style="display:flex;flex-direction:column;align-items:center;">
+              <h3 class="admin-report-title">Tickets por ciudad</h3>
+              <div style="max-width:400px;width:100%;">
+                <canvas id="chart-ciudad"></canvas>
+              </div>
+            </div>
+          </div>
+
+          <div class="admin-report-grid">
+            <div class="admin-report-card">
+              <h3 class="admin-report-title">Atenciones por ciudad</h3>
+              <div id="admin-city-stats" class="admin-report-list"></div>
+            </div>
+
+            <div class="admin-report-card">
+              <h3 class="admin-report-title">Atenciones por tipo de usuario</h3>
+              <div id="admin-usertype-stats" class="admin-report-list"></div>
+            </div>
+          </div>
+
+          <div class="admin-table-wrap">
+            <table class="admin-table">
+              <thead>
+                <tr>
+                  <th>Ticket</th>
+                  <th>Tipo</th>
+                  <th>Nombre</th>
+                  <th>Ciudad</th>
+                  <th>Radicado</th>
+                  <th>Asunto</th>
+                  <th>Quien radica</th>
+                  <th>Tipo memorial</th>
+                  <th>Archivos</th>
+                  <th>Estado</th>
+                  <th>Acción</th>
+                </tr>
+              </thead>
+              <tbody id="admin-tickets-body"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FOOTER ===== -->
+
+
+  <!-- ===== FLOATING WHATSAPP BUTTON ===== -->
+  <a href="https://wa.me/573228758620?text=Hola%2C%20quiero%20comunicarme%20con%20el%20Ing.%20Miguel%20%C3%81ngel%20Guti%C3%A9rrez%20para%20recibir%20soporte%20SAMAI."
+    target="_blank" rel="noopener" class="whatsapp-float" id="whatsapp-float" aria-label="Contactar por WhatsApp">
+    <svg width="28" height="28" viewBox="0 0 24 24" fill="white">
+      <path
+        d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z" />
+    </svg>
+    <span class="wa-tooltip">Soporte por WhatsApp</span>
+    <span class="wa-pulse"></span>
+  </a>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="footer" id="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href="#inicio" class="nav-logo footer-logo" id="footer-logo-link">
+            <div class="logo-icon">⚖️</div>
+            <div class="logo-text">
+              <span class="logo-main">Soporte</span>
+              <span class="logo-accent">SAMAI</span>
+            </div>
+          </a>
+          <p class="footer-tagline">SAMAI · Acciones que transforman la justicia</p>
+          <a href="https://wa.me/573228758620?text=Hola%2C%20quiero%20solicitar%20soporte%20SAMAI.%20Quedo%20atento%20a%20la%20atenci%C3%B3n%20del%20Ing.%20Miguel%20%C3%81ngel%20Guti%C3%A9rrez."
+            target="_blank" rel="noopener" class="btn-whatsapp btn-sm footer-wa" id="footer-btn-whatsapp">
+            Contactar por WhatsApp
+          </a>
+        </div>
+
+        <div class="footer-col">
+          <h4 class="footer-col-title">Servicios</h4>
+          <ul class="footer-links">
+            <li><a href="#servicios">Soporte técnico en SAMAI</a></li>
+            <li><a href="#servicios">Orientación a usuarios</a></li>
+            <li><a href="#servicios">Solución de incidencias</a></li>
+            <li><a href="#servicios">Plataformas judiciales</a></li>
+            <li><a href="#servicios">Gestión de solicitudes</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4 class="footer-col-title">Atención por</h4>
+          <p class="footer-person">Ing. Miguel Ángel Gutiérrez</p>
+          <h4 class="footer-col-title mt-2">Cobertura</h4>
+          <p class="footer-coverage">Tunja · Duitama · Sogamoso</p>
+          <p class="footer-coverage-sub">Usuarios externos</p>
+        </div>
+
+        <div class="footer-col">
+          <h4 class="footer-col-title">Horario de atención</h4>
+          <div class="footer-schedule">
+            <div class="fs-day">Lunes a viernes</div>
+            <div class="fs-time">8:00 a.m. – 12:00 m.</div>
+            <div class="fs-time">1:00 p.m. – 5:00 p.m.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <p class="footer-copy">© 2026 Soporte SAMAI · Ing. Miguel Ángel Gutiérrez · Juzgados Administrativos de
+          Boyacá
+        </p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ===== FLOATING WHATSAPP BUTTON ===== -->
+  <a href="https://wa.me/573228758620?text=Hola%2C%20quiero%20comunicarme%20con%20el%20Ing.%20Miguel%20%C3%81ngel%20Guti%C3%A9rrez%20para%20recibir%20soporte%20SAMAI."
+    target="_blank" rel="noopener" class="whatsapp-float" id="whatsapp-float" aria-label="Contactar por WhatsApp">
+    <svg width="28" height="28" viewBox="0 0 24 24" fill="white">
+      <path
+        d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z" />
+    </svg>
+    <span class="wa-tooltip">Soporte por WhatsApp</span>
+    <span class="wa-pulse"></span>
+  </a>
+
+  <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+
+</html>

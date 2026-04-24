@@ -1,0 +1,234 @@
+/* ================================================
+   PREMIUM DESIGN OVERRIDES
+   Enhances visual architecture of the SAMAI landing
+   ================================================ */
+
+/* 1. Global Spacing & Typography Enhancements */
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  letter-spacing: -0.01em;
+}
+
+.section-title {
+  font-size: clamp(2rem, 4vw, 2.75rem);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.15;
+}
+
+.section-subtitle {
+  font-size: 1.125rem;
+  line-height: 1.7;
+  color: var(--text-muted);
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* 2. Hero Enhancements */
+.hero {
+  padding: 130px 0 90px;
+}
+
+.hero-title {
+  font-size: clamp(2.5rem, 5vw, 4rem);
+  letter-spacing: -0.03em;
+  background: linear-gradient(135deg, #FFFFFF 0%, #E4E4E7 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.hero-title-accent {
+  background: linear-gradient(135deg, #60A5FA 0%, #3B82F6 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.hero-subtitle {
+  font-size: 1.15rem;
+  max-width: 580px;
+}
+
+/* Enhanced Hero Buttons */
+.hero-actions {
+  gap: 14px;
+}
+
+.hero-actions .btn-primary {
+  padding: 15px 28px;
+  font-size: 15px;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(59, 130, 246, 0.4);
+}
+
+.hero-actions .btn-whatsapp {
+  padding: 15px 28px;
+  font-size: 15px;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(37, 211, 102, 0.3);
+}
+
+.btn-portal-hero {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: white;
+  text-decoration: none;
+  font-weight: 600;
+  border-radius: 12px;
+  padding: 15px 28px;
+  font-size: 15px;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+}
+
+.btn-portal-hero:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.2);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
+}
+
+.btn-consulta-hero {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: transparent;
+  color: var(--text-light);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  text-decoration: none;
+  font-weight: 600;
+  border-radius: 12px;
+  padding: 15px 28px;
+  font-size: 15px;
+  transition: all 0.3s ease;
+}
+
+.btn-consulta-hero:hover {
+  background: rgba(255, 255, 255, 0.05);
+  color: #fff;
+  border-color: rgba(255, 255, 255, 0.3);
+  transform: translateY(-2px);
+}
+
+/* 3. Cards Premium Redesign (Glassmorphism & Soft Shadows) */
+.service-card, .process-card, .coverage-card, .trust-card, .faq-item, .contact-info, .contact-form-wrap, .help-ultra-card, .admin-card {
+  background: rgba(28, 28, 31, 0.6);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.2);
+  border-radius: 20px;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.service-card:hover, .process-card:hover, .coverage-card:hover, .trust-card:hover, .help-ultra-card:hover {
+  transform: translateY(-6px);
+  background: rgba(34, 34, 39, 0.8);
+  border-color: rgba(59, 130, 246, 0.3);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4), 0 0 20px rgba(59, 130, 246, 0.1);
+}
+
+/* Special treatment for Map Tags in coverage */
+.cov-tag {
+  background: rgba(59, 130, 246, 0.1);
+  border: 1px solid rgba(59, 130, 246, 0.2);
+  color: var(--blue-400);
+  border-radius: 8px;
+  font-weight: 600;
+}
+
+/* 4. Portal Documental Section Overhaul */
+.section-portal {
+  background: linear-gradient(180deg, var(--bg-darkest) 0%, rgba(15, 23, 42, 0.8) 50%, var(--bg-darkest) 100%);
+  position: relative;
+  overflow: hidden;
+  border-top: 1px solid rgba(255,255,255,0.02);
+  border-bottom: 1px solid rgba(255,255,255,0.02);
+}
+
+.section-portal::before {
+  content: '';
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  width: 60vw; height: 60vw;
+  background: radial-gradient(circle, rgba(59,130,246,0.08) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.section-portal .section-header {
+  position: relative;
+  z-index: 2;
+}
+
+.section-portal .btn-primary {
+  background: linear-gradient(135deg, #1E3A8A 0%, #3B82F6 100%);
+  border: 1px solid rgba(96, 165, 250, 0.3);
+  box-shadow: 0 8px 30px rgba(59, 130, 246, 0.3);
+  transition: all 0.3s ease;
+  position: relative;
+  z-index: 2;
+  border-radius: 12px;
+}
+
+.section-portal .btn-primary:hover {
+  background: linear-gradient(135deg, #2563EB 0%, #60A5FA 100%);
+  box-shadow: 0 12px 40px rgba(59, 130, 246, 0.5);
+  transform: translateY(-3px);
+}
+
+/* 5. Footer Enhancements */
+.footer {
+  border-top: 1px solid rgba(255,255,255,0.05);
+  background: #000;
+  padding: 4rem 0 2rem;
+}
+
+.footer-col-title {
+  color: #fff;
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin-bottom: 1.25rem;
+  letter-spacing: -0.01em;
+}
+
+.footer-person {
+  font-weight: 600;
+  color: var(--text-light);
+  font-size: 0.95rem;
+}
+
+/* 6. Inputs & Forms Premium Feel */
+.support-form input, .support-form select, .support-form textarea, .ticket-form input {
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 14px 16px;
+  border-radius: 12px;
+  color: white;
+  transition: all 0.3s ease;
+  font-family: inherit;
+}
+
+.support-form input:focus, .support-form select:focus, .support-form textarea:focus, .ticket-form input:focus {
+  background: rgba(0, 0, 0, 0.5);
+  border-color: var(--blue-500);
+  box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.15);
+  outline: none;
+}
+
+/* 7. Icons Premium Enhancements */
+.sc-icon-wrap, .process-icon, .cov-map-icon, .trust-card-icon {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  border-radius: 16px;
+}
+
+/* 8. Fix spacing */
+.section-services {
+  padding-top: 6rem;
+}

@@ -1,0 +1,30 @@
+[
+    {
+        "ticket": "SAMAI-20260410-0001",
+        "nombre": "MIGUEL ANGEL GUTIERREZ ROA",
+        "correo": "migutty@gmail.com",
+        "telefono": "+573228758620",
+        "ciudad": "Tunja",
+        "despacho": "",
+        "tipo_usuario": "Juzgado Administrativo",
+        "asunto": "sd",
+        "numero_proceso": "1500133332255588",
+        "descripcion": "asdas",
+        "estado": "Pendiente",
+        "fecha_creacion": "2026-04-10T10:04:31.124404"
+    },
+    {
+        "ticket": "SAMAI-20260410-0002",
+        "nombre": "MIGUEL ANGEL GUTIERREZ ROA",
+        "correo": "migutty@gmail.com",
+        "telefono": "+573228758620",
+        "ciudad": "Tunja",
+        "despacho": "j01",
+        "tipo_usuario": "Juzgado Administrativo",
+        "asunto": "reper",
+        "numero_proceso": "1500133332255588",
+        "descripcion": "sds",
+        "estado": "Pendiente",
+        "fecha_creacion": "2026-04-10T10:58:42.064283"
+    }
+]
