@@ -523,6 +523,7 @@ function renderAdminTable(data) {
         : '<span class="estado-badge estado-pendiente">Sin archivo</span>'
       }</td>
       <td>${estadoBadge(item.estado)}</td>
+      <td><span style="font-size:12px;color:${item.estado === 'Resuelto' ? '#22C55E' : '#F59E0B'};font-weight:600;">${item.tiempo_atencion || '—'}</span></td>
       <td>
         ${canEdit
         ? `

@@ -198,6 +198,46 @@ def guardar_historial(ticket_id, estado):
         print(f"[HISTORIAL ERROR] {e}")
 
 
+def calcular_tiempo_atencion(ticket_id):
+    """Calcula el tiempo entre 'Creado' y 'Resuelto' desde ticket_historial."""
+    try:
+        conn = get_conn()
+        cur = db_cursor(conn)
+        cur.execute(
+            "SELECT estado, fecha FROM ticket_historial WHERE ticket_id = %s ORDER BY id ASC",
+            (ticket_id,)
+        )
+        rows = cur.fetchall()
+        conn.close()
+
+        fecha_creado = None
+        fecha_resuelto = None
+
+        for r in rows:
+            h = dict(r)
+            if h['estado'] == 'Creado' and not fecha_creado:
+                fecha_creado = datetime.datetime.strptime(h['fecha'], "%Y-%m-%d %H:%M:%S")
+            if h['estado'] == 'Resuelto':
+                fecha_resuelto = datetime.datetime.strptime(h['fecha'], "%Y-%m-%d %H:%M:%S")
+
+        if not fecha_creado:
+            return "Sin datos"
+        if not fecha_resuelto:
+            return "En proceso..."
+
+        delta = fecha_resuelto - fecha_creado
+        total_min = int(delta.total_seconds() // 60)
+        horas = total_min // 60
+        minutos = total_min % 60
+
+        if horas > 0:
+            return f"{horas}h {minutos}m"
+        return f"{minutos}m"
+    except Exception as e:
+        print(f"[TIEMPO ERROR] {e}")
+        return "—"
+
+
 # ===== CORREO =====
 def send_email(to_email, subject, html_body, text_body=None):
     if not MAIL_USERNAME or not MAIL_PASSWORD or not to_email:
@@ -705,6 +745,11 @@ def admin_panel():
         conn.close()
 
         tickets = [dict(r) for r in rows]
+
+        # Calcular tiempo de atención por ticket
+        for t in tickets:
+            t['tiempo_atencion'] = calcular_tiempo_atencion(t['ticket'])
+
         total = len(tickets)
         pendientes = sum(1 for t in tickets if t["estado"] == "Pendiente")
         enProceso = sum(1 for t in tickets if t["estado"] == "En proceso")
