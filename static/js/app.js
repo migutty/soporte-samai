@@ -550,6 +550,7 @@ function renderAdminTable(data) {
               <option value="Resuelto" ${item.estado === 'Resuelto' ? 'selected' : ''}>Resuelto</option>
             </select>
             <button class="admin-save-btn" data-ticket="${item.ticket}">Guardar</button>
+            <button class="admin-historial-btn" data-ticket="${item.ticket}" style="margin-top:4px;font-size:11px;background:#334155;color:#CBD5E1;border:1px solid #475569;border-radius:6px;padding:4px 10px;cursor:pointer;">📋 Historial</button>
           `
         : `<span class="estado-badge estado-proceso">Solo consulta</span>`
       }
@@ -559,6 +560,40 @@ function renderAdminTable(data) {
   });
 
   bindAdminButtons();
+  bindHistorialButtons();
+}
+
+// ===== HISTORIAL DE ESTADOS =====
+function bindHistorialButtons() {
+  document.querySelectorAll('.admin-historial-btn').forEach(btn => {
+    btn.addEventListener('click', () => verHistorial(btn.dataset.ticket));
+  });
+}
+
+async function verHistorial(ticketId) {
+  try {
+    const resp = await fetch(`/api/historial/${ticketId}`);
+    const data = await resp.json();
+
+    if (!data.length) {
+      alert(`Ticket ${ticketId}\n\nSin historial registrado.`);
+      return;
+    }
+
+    let texto = `📋 HISTORIAL — ${ticketId}\n${'━'.repeat(32)}\n\n`;
+    data.forEach((h, i) => {
+      const icono = h.estado === 'Creado' ? '🟢'
+        : h.estado === 'En proceso' ? '🔵'
+        : h.estado === 'Resuelto' ? '✅'
+        : '⏳';
+      texto += `${icono}  ${h.estado}\n     ${h.fecha}\n\n`;
+    });
+
+    alert(texto);
+  } catch (err) {
+    console.error(err);
+    alert('Error consultando historial.');
+  }
 }
 
 function filterAdminTable() {

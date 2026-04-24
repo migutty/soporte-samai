@@ -108,6 +108,17 @@ def init_db():
                 conn.commit()
             except Exception:
                 conn.rollback()
+
+        # Tabla historial
+        cur.execute("""
+            CREATE TABLE IF NOT EXISTS ticket_historial (
+                id SERIAL PRIMARY KEY,
+                ticket_id TEXT NOT NULL,
+                estado TEXT NOT NULL,
+                fecha TEXT NOT NULL
+            )
+        """)
+        conn.commit()
     else:
         cur.execute("""
             CREATE TABLE IF NOT EXISTS tickets (
@@ -140,6 +151,17 @@ def init_db():
             except Exception:
                 pass
 
+        # Tabla historial
+        cur.execute("""
+            CREATE TABLE IF NOT EXISTS ticket_historial (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                ticket_id TEXT NOT NULL,
+                estado TEXT NOT NULL,
+                fecha TEXT NOT NULL
+            )
+        """)
+        conn.commit()
+
     conn.close()
 
 
@@ -168,6 +190,22 @@ def generate_ticket():
             count = 1
 
     return f"{prefix}{count:04d}"
+
+
+def guardar_historial(ticket_id, estado):
+    """Registra un cambio de estado en el historial."""
+    fecha = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    try:
+        conn = get_conn()
+        cur = db_cursor(conn)
+        cur.execute(
+            "INSERT INTO ticket_historial (ticket_id, estado, fecha) VALUES (%s, %s, %s)",
+            (ticket_id, estado, fecha)
+        )
+        conn.commit()
+        conn.close()
+    except Exception as e:
+        print(f"[HISTORIAL ERROR] {e}")
 
 
 # ===== CORREO =====
@@ -530,6 +568,9 @@ def soporte():
     conn.commit()
     conn.close()
 
+    # ===== HISTORIAL: CREADO =====
+    guardar_historial(ticket_id, "Creado")
+
     # ===== CORREOS DIFERENCIADOS =====
     es_memorial = ticket_data.get('tipo_solicitud') == 'Envío de memorial'
 
@@ -653,6 +694,13 @@ def admin_panel():
         cur.execute("UPDATE tickets SET estado = %s WHERE ticket = %s", (nuevo_estado, ticket_id))
         conn.commit()
 
+        # ===== HISTORIAL: CAMBIO DE ESTADO =====
+        cur.execute(
+            "INSERT INTO ticket_historial (ticket_id, estado, fecha) VALUES (%s, %s, %s)",
+            (ticket_id, nuevo_estado, datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+        )
+        conn.commit()
+
         cur.execute("SELECT * FROM tickets WHERE ticket = %s", (ticket_id,))
         row = cur.fetchone()
         conn.close()
@@ -682,6 +730,20 @@ def get_tickets():
     data = [dict(r) for r in rows]
     return jsonify(data)
 
+
+@app.route('/api/historial/<ticket>', methods=['GET'])
+def get_historial(ticket):
+    conn = get_conn()
+    cur = db_cursor(conn)
+    cur.execute(
+        "SELECT estado, fecha FROM ticket_historial WHERE ticket_id = %s ORDER BY id ASC",
+        (ticket,)
+    )
+    rows = cur.fetchall()
+    conn.close()
+
+    data = [dict(r) for r in rows]
+    return jsonify(data)
 
 
 
