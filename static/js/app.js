@@ -260,21 +260,6 @@ if (form && successMsg && errorMsg && errorText && submitBtn) {
     toggleMemorialFields();
   }
 
-  // ===== VALIDACIÓN ARCHIVO 10MB =====
-  const archivoInput = document.getElementById('archivo_memorial');
-  const archivoError = document.getElementById('archivo-error');
-  const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
-
-  if (archivoInput && archivoError) {
-    archivoInput.addEventListener('change', () => {
-      if (archivoInput.files.length > 0 && archivoInput.files[0].size > MAX_FILE_SIZE) {
-        archivoError.style.display = 'block';
-        archivoInput.value = '';
-      } else {
-        archivoError.style.display = 'none';
-      }
-    });
-  }
 
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
@@ -340,22 +325,7 @@ if (form && successMsg && errorMsg && errorText && submitBtn) {
       const result = await response.json();
 
       if (response.ok && result.status === 'ok') {
-
-        // ===== SUBIR ARCHIVO SI EXISTE =====
-        if (archivoInput && archivoInput.files.length > 0) {
-          try {
-            const fileData = new FormData();
-            fileData.append('file', archivoInput.files[0]);
-            fileData.append('ticket', result.ticket);
-            await fetch('/api/upload', { method: 'POST', body: fileData });
-          } catch (uploadErr) {
-            console.error('Error subiendo archivo:', uploadErr);
-          }
-        }
-
         form.reset();
-        if (archivoInput) archivoInput.value = '';
-        if (archivoError) archivoError.style.display = 'none';
         successMsg.style.display = 'block';
         successMsg.innerHTML = `
           <div class="success-icon">✅</div>

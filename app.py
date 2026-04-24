@@ -14,10 +14,6 @@ app = Flask(__name__)
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 DB_PATH = os.path.join(BASE_DIR, "tickets.db")
-UPLOAD_DIR = os.path.join(BASE_DIR, "uploads")
-os.makedirs(UPLOAD_DIR, exist_ok=True)
-
-app.config['MAX_CONTENT_LENGTH'] = 10 * 1024 * 1024  # 10 MB
 
 # ===== CONFIG CORREO =====
 MAIL_SERVER = os.getenv("MAIL_SERVER", "smtp.gmail.com")
@@ -39,14 +35,6 @@ WHATSAPP_APIKEY = os.getenv("WHATSAPP_APIKEY", "")
 # ===== CONFIG TELEGRAM =====
 TELEGRAM_TOKEN = os.getenv("TELEGRAM_TOKEN", "")
 TELEGRAM_CHAT_ID = os.getenv("TELEGRAM_CHAT_ID", "")
-
-# ===== ARCHIVOS PERMITIDOS =====
-ALLOWED_EXTENSIONS = {"pdf", "jpg", "png", "doc", "docx"}
-
-def allowed_file(filename):
-    return "." in filename and filename.rsplit(".", 1)[1].lower() in ALLOWED_EXTENSIONS
-
-
 # ===== DB =====
 DATABASE_URL = os.getenv("DATABASE_URL", "")
 USE_PG = bool(DATABASE_URL)
@@ -645,28 +633,6 @@ def soporte():
     return jsonify({"status": "ok", "ticket": ticket_id})
 
 
-@app.route('/api/upload', methods=['POST'])
-def upload_file():
-    file = request.files.get('file')
-    ticket = request.form.get('ticket')
-
-    if not file or not ticket:
-        return jsonify({"status": "error"}), 400
-
-    if not allowed_file(file.filename):
-        return jsonify({"status": "error", "message": "Archivo no permitido"}), 400
-
-    # Verificar tamaño (doble seguridad)
-    file.seek(0, 2)
-    size = file.tell()
-    file.seek(0)
-    if size > 10 * 1024 * 1024:
-        return jsonify({"status": "error", "message": "Archivo supera 10 MB"}), 400
-
-    filename = f"{ticket}_{file.filename}"
-    file.save(os.path.join(UPLOAD_DIR, filename))
-
-    return jsonify({"status": "ok"})
 
 
 @app.route('/api/admin', methods=['POST'])
