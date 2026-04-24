@@ -906,20 +906,20 @@ async function cargarExtensiones() {
 
     extensionesData.forEach(item => {
       const opt = document.createElement('option');
-      opt.value = item['Despacho judicial'];
-      opt.textContent = item['Despacho judicial'];
+      opt.value = item.despacho;
+      opt.textContent = item.despacho;
       select.appendChild(opt);
     });
 
     select.addEventListener('change', () => {
       const seleccionado = extensionesData.find(
-        i => i['Despacho judicial'] === select.value
+        i => i.despacho === select.value
       );
       const resultado = document.getElementById('ext-resultado');
       const numero = document.getElementById('ext-resultado-number');
 
       if (seleccionado && resultado && numero) {
-        numero.textContent = seleccionado['Numero extensión'];
+        numero.textContent = seleccionado.extension;
         resultado.style.display = 'flex';
         resultado.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
       }
