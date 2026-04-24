@@ -500,46 +500,81 @@ function renderAdminTable(data) {
 
   data.forEach(item => {
     const canEdit = adminSession.role === 'admin';
-
-    const tr = document.createElement('tr');
-
     const tipoSol = item.tipo_solicitud || 'Solicitud general';
     const esMemorial = tipoSol === 'Envío de memorial';
+
     const tipoBadge = esMemorial
-      ? '<span class="estado-badge estado-proceso" style="font-size:11px;">📄 Memorial</span>'
-      : '<span class="estado-badge estado-resuelto" style="font-size:11px;">📋 Solicitud</span>';
+      ? '<span class="estado-badge estado-proceso" style="font-size:11px;gap:4px;">📂 Memorial</span>'
+      : '<span class="estado-badge" style="font-size:11px;background:rgba(148,163,184,0.12);color:#94A3B8;border:1px solid rgba(148,163,184,0.2);">📋 Solicitud</span>';
+
+    const tiempoColor = item.estado === 'Resuelto' ? '#4ADE80' : (item.estado === 'En proceso' ? '#60A5FA' : '#FBBF24');
+
+    // Fila principal
+    const tr = document.createElement('tr');
+    tr.style.cursor = 'pointer';
+    tr.style.transition = 'background 0.2s ease';
+    if (esMemorial) tr.style.borderLeft = '3px solid rgba(59,130,246,0.4)';
 
     tr.innerHTML = `
-      <td>${item.ticket}</td>
+      <td><span style="font-weight:700;color:#E2E8F0;font-size:13px;letter-spacing:0.5px;">${item.ticket}</span></td>
       <td>${tipoBadge}</td>
-      <td>${item.nombre}</td>
-      <td>${item.ciudad || ''}</td>
-      <td>${item.numero_proceso || ''}</td>
-      <td>${item.asunto}</td>
-      <td>${item.quien_radica || ''}</td>
-      <td>${item.tipo_memorial || ''}</td>
-      <td>${item.link_drive
-        ? `<a href="${item.link_drive}" target="_blank" rel="noopener" class="estado-badge estado-resuelto" style="text-decoration:none;cursor:pointer;">📎 Descargar archivos</a>`
-        : '<span class="estado-badge estado-pendiente">Sin archivo</span>'
-      }</td>
-      <td>${estadoBadge(item.estado)}</td>
-      <td><span style="font-size:12px;color:${item.estado === 'Resuelto' ? '#22C55E' : '#F59E0B'};font-weight:600;">${item.tiempo_atencion || '—'}</span></td>
       <td>
-        ${canEdit
-        ? `
-            <select class="admin-estado-select" data-ticket="${item.ticket}">
+        <div style="line-height:1.4;">
+          <span style="font-weight:600;color:#E2E8F0;">${item.nombre}</span>
+          <span style="display:block;font-size:11px;color:#64748B;">${item.ciudad || ''} · ${item.asunto || ''}</span>
+        </div>
+      </td>
+      <td>${estadoBadge(item.estado)}</td>
+      <td><span style="font-size:12px;font-weight:700;color:${tiempoColor};">${item.tiempo_atencion || '—'}</span></td>
+      <td>
+        <div style="display:flex;flex-direction:column;gap:4px;min-width:120px;">
+          ${canEdit ? `
+            <select class="admin-estado-select" data-ticket="${item.ticket}" style="font-size:12px;padding:6px 8px;">
               <option value="Pendiente" ${item.estado === 'Pendiente' ? 'selected' : ''}>Pendiente</option>
               <option value="En proceso" ${item.estado === 'En proceso' ? 'selected' : ''}>En proceso</option>
               <option value="Resuelto" ${item.estado === 'Resuelto' ? 'selected' : ''}>Resuelto</option>
             </select>
-            <button class="admin-save-btn" data-ticket="${item.ticket}">Guardar</button>
-            <button class="admin-historial-btn" data-ticket="${item.ticket}" style="margin-top:4px;font-size:11px;background:#334155;color:#CBD5E1;border:1px solid #475569;border-radius:6px;padding:4px 10px;cursor:pointer;">📋 Historial</button>
-          `
-        : `<span class="estado-badge estado-proceso">Solo consulta</span>`
-      }
+            <div style="display:flex;gap:4px;">
+              <button class="admin-save-btn" data-ticket="${item.ticket}" style="font-size:11px;padding:5px 10px;flex:1;">Guardar</button>
+              <button class="admin-historial-btn" data-ticket="${item.ticket}" style="font-size:11px;background:#334155;color:#CBD5E1;border:1px solid #475569;border-radius:6px;padding:5px 10px;cursor:pointer;flex:1;">📋</button>
+            </div>
+            ${item.link_drive ? `<a href="${item.link_drive}" target="_blank" rel="noopener" style="font-size:11px;color:#60A5FA;text-decoration:none;text-align:center;">📎 Ver documento</a>` : ''}
+          ` : '<span class="estado-badge estado-proceso" style="font-size:11px;">Solo consulta</span>'}
+        </div>
       </td>
     `;
+
+    // Fila de detalle expandible
+    const detailTr = document.createElement('tr');
+    detailTr.style.display = 'none';
+    detailTr.innerHTML = `
+      <td colspan="6" style="padding:0;">
+        <div style="background:rgba(15,23,42,0.6);border:1px solid rgba(255,255,255,0.06);border-radius:10px;margin:4px 12px 12px;padding:16px 20px;display:grid;grid-template-columns:1fr 1fr;gap:8px 24px;font-size:13px;">
+          <div><span style="color:#64748B;">📌 Asunto:</span> <span style="color:#CBD5E1;">${item.asunto || '—'}</span></div>
+          <div><span style="color:#64748B;">🏛️ Ciudad:</span> <span style="color:#CBD5E1;">${item.ciudad || '—'}</span></div>
+          <div><span style="color:#64748B;">🏢 Despacho:</span> <span style="color:#CBD5E1;">${item.despacho || '—'}</span></div>
+          <div><span style="color:#64748B;">📧 Correo:</span> <span style="color:#CBD5E1;">${item.correo || '—'}</span></div>
+          <div><span style="color:#64748B;">📞 Teléfono:</span> <span style="color:#CBD5E1;">${item.telefono || '—'}</span></div>
+          <div><span style="color:#64748B;">📁 Proceso:</span> <span style="color:#CBD5E1;">${item.numero_proceso || '—'}</span></div>
+          ${esMemorial ? `
+            <div><span style="color:#64748B;">🧑‍⚖️ Radica:</span> <span style="color:#CBD5E1;">${item.quien_radica || '—'}</span></div>
+            <div><span style="color:#64748B;">📄 Tipo memorial:</span> <span style="color:#CBD5E1;">${item.tipo_memorial || '—'}</span></div>
+          ` : ''}
+          <div style="grid-column:1/-1;"><span style="color:#64748B;">📝 Descripción:</span> <span style="color:#CBD5E1;">${item.descripcion || '—'}</span></div>
+          <div><span style="color:#64748B;">📅 Fecha:</span> <span style="color:#CBD5E1;">${item.fecha_creacion || '—'}</span></div>
+        </div>
+      </td>
+    `;
+
+    // Toggle expand on click
+    tr.addEventListener('click', (e) => {
+      if (e.target.closest('select, button, a')) return;
+      detailTr.style.display = detailTr.style.display === 'none' ? 'table-row' : 'none';
+      tr.style.background = detailTr.style.display === 'none' ? '' : 'rgba(59,130,246,0.04)';
+    });
+
     adminTicketsBody.appendChild(tr);
+    adminTicketsBody.appendChild(detailTr);
   });
 
   bindAdminButtons();
