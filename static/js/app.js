@@ -169,7 +169,8 @@ function initRevealElements() {
     '.trust-card',
     '.faq-item',
     '.admin-card',
-    '.help-ultra-card'
+    '.help-ultra-card',
+    '.info-util-card'
   ];
 
   selectors.forEach(selector => {
@@ -291,6 +292,7 @@ if (form && successMsg && errorMsg && errorText && submitBtn) {
     ) {
       errorText.textContent = 'Por favor completa todos los campos obligatorios.';
       errorMsg.style.display = 'flex';
+      errorMsg.scrollIntoView({ behavior: 'smooth', block: 'center' });
       return;
     }
 
@@ -302,6 +304,7 @@ if (form && successMsg && errorMsg && errorText && submitBtn) {
       if (!linkDrive || (!linkDrive.startsWith('https://') && !linkDrive.startsWith('http://'))) {
         errorText.textContent = 'Debe ingresar un enlace válido de Google Drive u otro servicio (debe comenzar con https:// o http://).';
         errorMsg.style.display = 'flex';
+        errorMsg.scrollIntoView({ behavior: 'smooth', block: 'center' });
         return;
       }
     }
@@ -341,15 +344,17 @@ if (form && successMsg && errorMsg && errorText && submitBtn) {
         successMsg.style.display = 'block';
         successMsg.innerHTML = `
           <div class="success-icon">✅</div>
-          <p class="success-title">Solicitud enviada correctamente</p>
+          <p class="success-title">Su solicitud fue enviada correctamente</p>
           <p class="success-msg">
-            Su número de ticket es: <strong>${result.ticket}</strong>
+            Número de ticket: <strong>${result.ticket}</strong><br>
+            Pronto recibirá atención por parte del equipo de soporte.
           </p>
         `;
         if (despachoField) {
           despachoField.innerHTML = `<option value="" disabled selected>Seleccione despacho</option>`;
         }
         toggleMemorialFields();
+        successMsg.scrollIntoView({ behavior: 'smooth', block: 'center' });
       } else {
         throw new Error(result.message || 'No fue posible enviar la solicitud.');
       }
@@ -357,6 +362,7 @@ if (form && successMsg && errorMsg && errorText && submitBtn) {
       console.error(err);
       errorText.textContent = 'No fue posible enviar la solicitud. Intente nuevamente.';
       errorMsg.style.display = 'flex';
+      errorMsg.scrollIntoView({ behavior: 'smooth', block: 'center' });
     } finally {
       submitBtn.disabled = false;
       submitBtn.innerHTML = 'Enviar solicitud de soporte';
@@ -886,6 +892,36 @@ function actualizarEstadoSoporte() {
 actualizarEstadoSoporte();
 
 console.log('SAMAI Empresa cargado correctamente');
+
+// ===== COPIAR EXTENSIÓN AL PORTAPAPELES =====
+function copyToClipboard(ext, btnElement) {
+  navigator.clipboard.writeText(ext).then(() => {
+    const originalText = btnElement.textContent;
+    btnElement.textContent = '✅ Copiado';
+    btnElement.classList.add('copied');
+    setTimeout(() => {
+      btnElement.textContent = '📋 Copiar';
+      btnElement.classList.remove('copied');
+    }, 1500);
+  }).catch(() => {
+    // Fallback for older browsers
+    const textarea = document.createElement('textarea');
+    textarea.value = ext;
+    textarea.style.position = 'fixed';
+    textarea.style.opacity = '0';
+    document.body.appendChild(textarea);
+    textarea.select();
+    document.execCommand('copy');
+    document.body.removeChild(textarea);
+
+    btnElement.textContent = '✅ Copiado';
+    btnElement.classList.add('copied');
+    setTimeout(() => {
+      btnElement.textContent = '📋 Copiar';
+      btnElement.classList.remove('copied');
+    }, 1500);
+  });
+}
 
 // ===== AYUDAS ULTRA PRO MODAL =====
 const helpUltraModal = document.getElementById('help-ultra-modal');
