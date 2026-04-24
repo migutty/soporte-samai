@@ -48,45 +48,97 @@ def allowed_file(filename):
 
 
 # ===== DB =====
+DATABASE_URL = os.getenv("DATABASE_URL", "")
+USE_PG = bool(DATABASE_URL)
+
+if USE_PG:
+    import psycopg2
+    import psycopg2.extras
+
+
 def get_conn():
-    conn = sqlite3.connect(DB_PATH)
-    conn.row_factory = sqlite3.Row
-    return conn
+    if USE_PG:
+        conn = psycopg2.connect(DATABASE_URL)
+        return conn
+    else:
+        conn = sqlite3.connect(DB_PATH)
+        conn.row_factory = sqlite3.Row
+        return conn
+
+
+def db_cursor(conn):
+    """Devuelve cursor con soporte dict para ambos motores."""
+    if USE_PG:
+        return conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
+    return conn.cursor()
 
 
 def init_db():
     conn = get_conn()
-    cur = conn.cursor()
-    cur.execute("""
-        CREATE TABLE IF NOT EXISTS tickets (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            ticket TEXT UNIQUE NOT NULL,
-            nombre TEXT,
-            correo TEXT,
-            telefono TEXT,
-            ciudad TEXT,
-            despacho TEXT,
-            tipo_usuario TEXT,
-            asunto TEXT,
-            numero_proceso TEXT,
-            descripcion TEXT,
-            estado TEXT DEFAULT 'Pendiente',
-            fecha_creacion TEXT,
-            tipo_solicitud TEXT,
-            quien_radica TEXT,
-            tipo_memorial TEXT,
-            link_drive TEXT
-        )
-    """)
-    conn.commit()
+    cur = db_cursor(conn)
 
-    # Migrar tablas existentes que no tengan las columnas nuevas
-    for col in ["tipo_solicitud", "quien_radica", "tipo_memorial", "link_drive"]:
-        try:
-            cur.execute(f"ALTER TABLE tickets ADD COLUMN {col} TEXT")
-            conn.commit()
-        except Exception:
-            pass
+    if USE_PG:
+        cur.execute("""
+            CREATE TABLE IF NOT EXISTS tickets (
+                id SERIAL PRIMARY KEY,
+                ticket TEXT UNIQUE NOT NULL,
+                nombre TEXT,
+                correo TEXT,
+                telefono TEXT,
+                ciudad TEXT,
+                despacho TEXT,
+                tipo_usuario TEXT,
+                asunto TEXT,
+                numero_proceso TEXT,
+                descripcion TEXT,
+                estado TEXT DEFAULT 'Pendiente',
+                fecha_creacion TEXT,
+                tipo_solicitud TEXT,
+                quien_radica TEXT,
+                tipo_memorial TEXT,
+                link_drive TEXT
+            )
+        """)
+        conn.commit()
+
+        # Migrar columnas nuevas (PostgreSQL)
+        for col in ["tipo_solicitud", "quien_radica", "tipo_memorial", "link_drive"]:
+            try:
+                cur.execute(f"ALTER TABLE tickets ADD COLUMN {col} TEXT")
+                conn.commit()
+            except Exception:
+                conn.rollback()
+    else:
+        cur.execute("""
+            CREATE TABLE IF NOT EXISTS tickets (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                ticket TEXT UNIQUE NOT NULL,
+                nombre TEXT,
+                correo TEXT,
+                telefono TEXT,
+                ciudad TEXT,
+                despacho TEXT,
+                tipo_usuario TEXT,
+                asunto TEXT,
+                numero_proceso TEXT,
+                descripcion TEXT,
+                estado TEXT DEFAULT 'Pendiente',
+                fecha_creacion TEXT,
+                tipo_solicitud TEXT,
+                quien_radica TEXT,
+                tipo_memorial TEXT,
+                link_drive TEXT
+            )
+        """)
+        conn.commit()
+
+        # Migrar columnas nuevas (SQLite)
+        for col in ["tipo_solicitud", "quien_radica", "tipo_memorial", "link_drive"]:
+            try:
+                cur.execute(f"ALTER TABLE tickets ADD COLUMN {col} TEXT")
+                conn.commit()
+            except Exception:
+                pass
 
     conn.close()
 
@@ -96,10 +148,10 @@ def generate_ticket():
     prefix = f"SAMAI-{today_str}-"
 
     conn = get_conn()
-    cur = conn.cursor()
+    cur = db_cursor(conn)
     cur.execute("""
         SELECT ticket FROM tickets
-        WHERE ticket LIKE ?
+        WHERE ticket LIKE %s
         ORDER BY id DESC
         LIMIT 1
     """, (f"{prefix}%",))
@@ -450,13 +502,13 @@ def soporte():
     }
 
     conn = get_conn()
-    cur = conn.cursor()
+    cur = db_cursor(conn)
     cur.execute("""
         INSERT INTO tickets (
             ticket,nombre,correo,telefono,ciudad,despacho,
             tipo_usuario,asunto,numero_proceso,descripcion,
             estado,fecha_creacion,tipo_solicitud,quien_radica,tipo_memorial,link_drive
-        ) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
+        ) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)
     """, (
         ticket_data["ticket"],
         ticket_data["nombre"],
@@ -553,7 +605,7 @@ def admin_panel():
     # ===== ESTADÍSTICAS =====
     if action == 'get_stats':
         conn = get_conn()
-        cur = conn.cursor()
+        cur = db_cursor(conn)
         cur.execute("SELECT * FROM tickets ORDER BY id DESC")
         rows = cur.fetchall()
         conn.close()
@@ -597,11 +649,11 @@ def admin_panel():
             return jsonify({"status": "error", "message": "Faltan datos"}), 400
 
         conn = get_conn()
-        cur = conn.cursor()
-        cur.execute("UPDATE tickets SET estado = ? WHERE ticket = ?", (nuevo_estado, ticket_id))
+        cur = db_cursor(conn)
+        cur.execute("UPDATE tickets SET estado = %s WHERE ticket = %s", (nuevo_estado, ticket_id))
         conn.commit()
 
-        cur.execute("SELECT * FROM tickets WHERE ticket = ?", (ticket_id,))
+        cur.execute("SELECT * FROM tickets WHERE ticket = %s", (ticket_id,))
         row = cur.fetchone()
         conn.close()
 
@@ -622,7 +674,7 @@ def admin_panel():
 @app.route('/api/tickets', methods=['GET'])
 def get_tickets():
     conn = get_conn()
-    cur = conn.cursor()
+    cur = db_cursor(conn)
     cur.execute("SELECT * FROM tickets ORDER BY id DESC")
     rows = cur.fetchall()
     conn.close()
