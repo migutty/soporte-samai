@@ -546,6 +546,14 @@ def soporte():
         if not str(data.get(field, "")).strip():
             return jsonify({"status": "error", "message": f"Falta {field}"}), 400
 
+    # Validar link obligatorio para memoriales
+    tipo_solicitud = data.get("tipo_solicitud", "Solicitud general")
+    link_drive = str(data.get("link_drive", "")).strip()
+
+    if tipo_solicitud == "Envío de memorial":
+        if not link_drive or not (link_drive.startswith("https://") or link_drive.startswith("http://")):
+            return jsonify({"status": "error", "message": "Debe ingresar un enlace válido para el memorial"}), 400
+
     ticket_id = generate_ticket()
     fecha = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 

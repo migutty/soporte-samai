@@ -294,6 +294,18 @@ if (form && successMsg && errorMsg && errorText && submitBtn) {
       return;
     }
 
+    // ===== VALIDACIÓN LINK MEMORIAL =====
+    const tipoSol = form.tipo_solicitud ? form.tipo_solicitud.value : 'Solicitud general';
+    const linkDrive = form.link_drive ? form.link_drive.value.trim() : '';
+
+    if (tipoSol === 'Envío de memorial') {
+      if (!linkDrive || (!linkDrive.startsWith('https://') && !linkDrive.startsWith('http://'))) {
+        errorText.textContent = 'Debe ingresar un enlace válido de Google Drive u otro servicio (debe comenzar con https:// o http://).';
+        errorMsg.style.display = 'flex';
+        return;
+      }
+    }
+
     submitBtn.disabled = true;
     submitBtn.innerHTML = 'Enviando solicitud...';
 
