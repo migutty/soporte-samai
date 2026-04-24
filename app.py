@@ -845,6 +845,28 @@ def get_historial(ticket):
 
 
 
+# ===== EXTENSIONES DESDE EXCEL =====
+@app.route('/api/extensiones', methods=['GET'])
+def get_extensiones():
+    try:
+        excel_path = os.path.join(BASE_DIR, "Directorio Teams Phone juzgados administrtaivos.xlsx")
+        df = pd.read_excel(excel_path, header=1)
+        df = df.dropna(subset=[df.columns[0]])
+        resultado = []
+        for _, row in df.iterrows():
+            despacho = str(row.get("Despacho judicial", "")).strip()
+            extension = str(row.get("Numero extensión", "")).strip()
+            if despacho and extension:
+                resultado.append({
+                    "Despacho judicial": despacho,
+                    "Numero extensión": extension
+                })
+        return jsonify(resultado)
+    except Exception as e:
+        print(f"[EXTENSIONES ERROR] {e}")
+        return jsonify([]), 500
+
+
 # ===== INIT =====
 init_db()
 

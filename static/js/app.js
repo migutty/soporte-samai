@@ -893,35 +893,76 @@ actualizarEstadoSoporte();
 
 console.log('SAMAI Empresa cargado correctamente');
 
-// ===== COPIAR EXTENSIÓN AL PORTAPAPELES =====
-function copyToClipboard(ext, btnElement) {
-  navigator.clipboard.writeText(ext).then(() => {
-    const originalText = btnElement.textContent;
-    btnElement.textContent = '✅ Copiado';
-    btnElement.classList.add('copied');
-    setTimeout(() => {
-      btnElement.textContent = '📋 Copiar';
-      btnElement.classList.remove('copied');
-    }, 1500);
-  }).catch(() => {
-    // Fallback for older browsers
-    const textarea = document.createElement('textarea');
-    textarea.value = ext;
-    textarea.style.position = 'fixed';
-    textarea.style.opacity = '0';
-    document.body.appendChild(textarea);
-    textarea.select();
-    document.execCommand('copy');
-    document.body.removeChild(textarea);
+// ===== EXTENSIONES DINÁMICAS =====
+let extensionesData = [];
 
-    btnElement.textContent = '✅ Copiado';
-    btnElement.classList.add('copied');
+async function cargarExtensiones() {
+  const select = document.getElementById('ext-despacho-select');
+  if (!select) return;
+
+  try {
+    const resp = await fetch('/api/extensiones');
+    extensionesData = await resp.json();
+
+    extensionesData.forEach(item => {
+      const opt = document.createElement('option');
+      opt.value = item['Despacho judicial'];
+      opt.textContent = item['Despacho judicial'];
+      select.appendChild(opt);
+    });
+
+    select.addEventListener('change', () => {
+      const seleccionado = extensionesData.find(
+        i => i['Despacho judicial'] === select.value
+      );
+      const resultado = document.getElementById('ext-resultado');
+      const numero = document.getElementById('ext-resultado-number');
+
+      if (seleccionado && resultado && numero) {
+        numero.textContent = seleccionado['Numero extensión'];
+        resultado.style.display = 'flex';
+        resultado.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }
+    });
+  } catch (err) {
+    console.error('[EXTENSIONES] Error cargando:', err);
+  }
+}
+
+function copiarExtension() {
+  const numero = document.getElementById('ext-resultado-number');
+  const btn = document.getElementById('btn-copiar-ext');
+  if (!numero || !btn) return;
+
+  const ext = numero.textContent.trim();
+
+  navigator.clipboard.writeText(ext).then(() => {
+    btn.textContent = '✅ Extensión copiada';
+    btn.classList.add('copied');
     setTimeout(() => {
-      btnElement.textContent = '📋 Copiar';
-      btnElement.classList.remove('copied');
-    }, 1500);
+      btn.textContent = '📋 Copiar';
+      btn.classList.remove('copied');
+    }, 2000);
+  }).catch(() => {
+    const ta = document.createElement('textarea');
+    ta.value = ext;
+    ta.style.position = 'fixed';
+    ta.style.opacity = '0';
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+
+    btn.textContent = '✅ Extensión copiada';
+    btn.classList.add('copied');
+    setTimeout(() => {
+      btn.textContent = '📋 Copiar';
+      btn.classList.remove('copied');
+    }, 2000);
   });
 }
+
+cargarExtensiones();
 
 // ===== AYUDAS ULTRA PRO MODAL =====
 const helpUltraModal = document.getElementById('help-ultra-modal');

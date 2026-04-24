@@ -879,44 +879,43 @@
         <div class="info-util-card card-phone">
           <div class="info-util-header">
             <div class="info-util-icon">📞</div>
-            <h3>Atención telefónica SAMAI<small>Tribunal Administrativo de Boyacá</small></h3>
+            <h3>Atención telefónica SAMAI<small>PBX Consejo Superior de la Judicatura</small></h3>
           </div>
+
+          <p class="pbx-instrucciones">
+            Los usuarios externos deben comunicarse a través del PBX dispuesto por el Consejo Superior de la Judicatura:
+          </p>
 
           <div class="phone-main">
             <span class="phone-main-icon">🏛️</span>
             <div class="phone-main-info">
-              <span class="phone-main-label">Número principal</span>
-              <span class="phone-main-number">310 123 4567</span>
+              <span class="phone-main-label">PBX Nacional</span>
+              <span class="phone-main-number">601 518 9915</span>
             </div>
           </div>
 
-          <div class="ext-title">Extensiones por juzgado</div>
-          <div class="ext-list">
-            <div class="ext-item">
-              <span class="ext-name">Juzgado 1 Adm. Tunja</span>
-              <div class="ext-actions">
-                <span class="ext-number">Ext. 101</span>
-                <button type="button" class="btn-copy-ext" onclick="copyToClipboard('101', this)" title="Copiar extensión">📋 Copiar</button>
-              </div>
-            </div>
-            <div class="ext-item">
-              <span class="ext-name">Juzgado 2 Adm. Tunja</span>
-              <div class="ext-actions">
-                <span class="ext-number">Ext. 102</span>
-                <button type="button" class="btn-copy-ext" onclick="copyToClipboard('102', this)" title="Copiar extensión">📋 Copiar</button>
-              </div>
-            </div>
-            <div class="ext-item">
-              <span class="ext-name">Juzgado 3 Adm. Tunja</span>
-              <div class="ext-actions">
-                <span class="ext-number">Ext. 103</span>
-                <button type="button" class="btn-copy-ext" onclick="copyToClipboard('103', this)" title="Copiar extensión">📋 Copiar</button>
-              </div>
-            </div>
+          <p class="pbx-instrucciones">
+            Una vez contestada la llamada por el sistema, el usuario debe digitar la extensión del despacho judicial seguida de la tecla <strong>(#)</strong>.
+          </p>
+
+          <div class="ext-title">Buscar extensión por despacho</div>
+
+          <div class="ext-selector-wrap">
+            <select id="ext-despacho-select" class="ext-select">
+              <option value="" disabled selected>Seleccione su despacho judicial</option>
+            </select>
+          </div>
+
+          <div id="ext-resultado" class="ext-resultado" style="display:none;">
+            <div class="ext-resultado-label">Extensión:</div>
+            <div class="ext-resultado-number" id="ext-resultado-number"></div>
+            <button type="button" class="btn-copy-ext btn-copy-ext-lg" id="btn-copiar-ext" onclick="copiarExtension()">
+              📋 Copiar
+            </button>
           </div>
         </div>
 
-        <!-- TARJETA: Centro de Ayuda SAMAI -->
+        <!-- TARJETA: Ayuda SAMAI -->
         <div class="info-util-card card-help">
           <div class="info-util-header">
             <div class="info-util-icon">📘</div>
@@ -925,7 +924,6 @@
 
           <p class="help-util-desc">
             Consulte guías, manuales y soluciones directamente en la plataforma SAMAI.
-            Acceda a recursos de ayuda antes de crear una solicitud de soporte.
           </p>
 
           <div class="help-util-features">
@@ -955,7 +953,7 @@
               <polyline points="15 3 21 3 21 9"/>
               <line x1="10" y1="14" x2="21" y2="3"/>
             </svg>
-            Ir a ayuda SAMAI
+            Ir a ayuda
           </a>
         </div>
       </div>
