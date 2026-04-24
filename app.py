@@ -327,7 +327,7 @@ def enviar_telegram(ticket_data):
 
 # ===== HTML CORREOS =====
 def _email_base(content):
-    """Plantilla base profesional para todos los correos."""
+    """Plantilla base profesional institucional para todos los correos."""
     return f"""
     <!DOCTYPE html>
     <html lang="es">
@@ -338,9 +338,14 @@ def _email_base(content):
           <table width="600" cellpadding="0" cellspacing="0" style="background:#ffffff;border-radius:12px;overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,0.08);">
             <!-- HEADER -->
             <tr>
-              <td style="background:linear-gradient(135deg,#0B2A4A 0%,#1E5A7A 100%);padding:30px 40px;text-align:center;">
-                <h1 style="margin:0;color:#ffffff;font-size:28px;font-weight:700;letter-spacing:1px;">SAMAI</h1>
-                <p style="margin:6px 0 0;color:#93C5FD;font-size:13px;letter-spacing:2px;">SOPORTE TÉCNICO</p>
+              <td style="background:linear-gradient(135deg,#0B2A4A 0%,#1E5A7A 100%);padding:28px 40px;text-align:center;">
+                <h1 style="margin:0;color:#ffffff;font-size:26px;font-weight:800;letter-spacing:1.5px;">SAMAI</h1>
+                <p style="margin:4px 0 0;color:#93C5FD;font-size:12px;letter-spacing:2px;text-transform:uppercase;">Sistema de Soporte Técnico</p>
+              </td>
+            </tr>
+            <tr>
+              <td style="background:#1E3A5F;padding:8px 40px;text-align:center;">
+                <p style="margin:0;color:#93C5FD;font-size:11px;letter-spacing:1px;">Juzgados Administrativos · Rama Judicial · Boyacá</p>
               </td>
             </tr>
             <!-- CONTENT -->
@@ -351,9 +356,11 @@ def _email_base(content):
             </tr>
             <!-- FOOTER -->
             <tr>
-              <td style="background:#F8FAFC;padding:20px 40px;text-align:center;border-top:1px solid #E2E8F0;">
-                <p style="margin:0;color:#94A3B8;font-size:12px;">Este es un correo automático del sistema SAMAI.</p>
-                <p style="margin:4px 0 0;color:#94A3B8;font-size:12px;">Por favor no responda a este mensaje.</p>
+              <td style="background:#0B2A4A;padding:24px 40px;text-align:center;">
+                <p style="margin:0;color:#93C5FD;font-size:12px;font-weight:600;">Sistema de Soporte SAMAI</p>
+                <p style="margin:4px 0 0;color:#64748B;font-size:11px;">Ing. Miguel Ángel Gutiérrez Roa · Soporte Técnico</p>
+                <p style="margin:8px 0 0;color:#475569;font-size:10px;">Este es un correo automático. Por favor no responda a este mensaje.</p>
+                <p style="margin:4px 0 0;color:#475569;font-size:10px;">© {datetime.datetime.now().year} SAMAI · Todos los derechos reservados</p>
               </td>
             </tr>
           </table>
@@ -374,11 +381,26 @@ def _ticket_row(label, value, icon=""):
     """
 
 
+def _link_row(label, url, icon="📎"):
+    """Fila con enlace clickeable."""
+    if not url:
+        return _ticket_row(label, "—", icon)
+    return f"""
+    <tr>
+      <td style="padding:10px 14px;border-bottom:1px solid #F1F5F9;color:#64748B;font-size:13px;font-weight:600;white-space:nowrap;">{icon} {label}</td>
+      <td style="padding:10px 14px;border-bottom:1px solid #F1F5F9;"><a href="{url}" target="_blank" style="color:#2563EB;font-size:14px;text-decoration:underline;">Ver archivos adjuntos</a></td>
+    </tr>
+    """
+
+
 def admin_email_html(t):
     es_memorial = t.get('tipo_solicitud') == 'Envío de memorial'
 
+    tipo_badge = 'MEMORIAL RECIBIDO' if es_memorial else 'NUEVA SOLICITUD RECIBIDA'
+    badge_bg = '#DBEAFE' if es_memorial else '#FEF3C7'
+    badge_color = '#1E40AF' if es_memorial else '#92400E'
+
     rows = (
-        _ticket_row("Tipo solicitud", t.get('tipo_solicitud', 'Solicitud general'), "📝") +
         _ticket_row("Nombre", t['nombre'], "👤") +
         _ticket_row("Correo", t['correo'], "📧") +
         _ticket_row("Teléfono", t.get('telefono', ''), "📞") +
@@ -392,9 +414,9 @@ def admin_email_html(t):
 
     if es_memorial:
         rows += (
-            _ticket_row("Quien radica", t.get('quien_radica', ''), "👤") +
+            _ticket_row("Quien radica", t.get('quien_radica', ''), "🧑‍⚖️") +
             _ticket_row("Tipo memorial", t.get('tipo_memorial', ''), "📄") +
-            _ticket_row("Enlace archivos", t.get('link_drive', ''), "📎")
+            _link_row("Archivos adjuntos", t.get('link_drive', ''))
         )
 
     rows += (
@@ -402,22 +424,20 @@ def admin_email_html(t):
         _ticket_row("Estado", "Pendiente", "⏳")
     )
 
-    tipo_badge = 'MEMORIAL RECIBIDO' if es_memorial else 'NUEVO TICKET RECIBIDO'
-    badge_bg = '#DBEAFE' if es_memorial else '#FEF3C7'
-    badge_color = '#1E40AF' if es_memorial else '#92400E'
-
     content = f"""
     <div style="text-align:center;margin-bottom:25px;">
-      <span style="display:inline-block;background:{badge_bg};color:{badge_color};padding:6px 16px;border-radius:20px;font-size:12px;font-weight:600;letter-spacing:1px;">{tipo_badge}</span>
+      <span style="display:inline-block;background:{badge_bg};color:{badge_color};padding:6px 18px;border-radius:20px;font-size:12px;font-weight:700;letter-spacing:1px;">{tipo_badge}</span>
     </div>
     <div style="background:#EFF6FF;border:2px solid #3B82F6;border-radius:10px;padding:20px;text-align:center;margin-bottom:25px;">
-      <p style="margin:0 0 4px;color:#64748B;font-size:12px;text-transform:uppercase;letter-spacing:1px;">Número de ticket</p>
-      <p style="margin:0;color:#1E40AF;font-size:26px;font-weight:800;letter-spacing:2px;">{t['ticket']}</p>
+      <p style="margin:0 0 4px;color:#64748B;font-size:11px;text-transform:uppercase;letter-spacing:1px;">Número de ticket</p>
+      <p style="margin:0;color:#1E40AF;font-size:28px;font-weight:800;letter-spacing:2px;">{t['ticket']}</p>
     </div>
     <table width="100%" cellpadding="0" cellspacing="0" style="border:1px solid #E2E8F0;border-radius:8px;overflow:hidden;">
       {rows}
     </table>
-    <p style="margin:25px 0 0;color:#64748B;font-size:13px;text-align:center;">Ingrese al panel de administración para gestionar este ticket.</p>
+    <div style="background:#F8FAFC;border-radius:8px;padding:14px 18px;border-left:4px solid #3B82F6;margin-top:20px;">
+      <p style="margin:0;color:#475569;font-size:13px;line-height:1.6;">Ingrese al panel de administración para gestionar este ticket.</p>
+    </div>
     """
 
     return _email_base(content)
@@ -426,35 +446,50 @@ def admin_email_html(t):
 def user_email_html(t):
     es_memorial = t.get('tipo_solicitud') == 'Envío de memorial'
     badge_text = 'MEMORIAL RECIBIDO ✓' if es_memorial else 'SOLICITUD RECIBIDA ✓'
-    intro_text = 'Hemos recibido su memorial.' if es_memorial else 'Hemos recibido su solicitud de soporte técnico. A continuación encontrará los detalles:'
 
-    memorial_rows = ''
     if es_memorial:
-        memorial_rows = (
-            _ticket_row("Quien radica", t.get('quien_radica', ''), "👤") +
+        intro_text = 'Hemos recibido su memorial correctamente. A continuación encontrará el resumen de la información registrada:'
+    else:
+        intro_text = 'Hemos recibido su solicitud de soporte técnico. A continuación encontrará los detalles de su registro:'
+
+    # Filas comunes
+    rows = (
+        _ticket_row("Nombre", t['nombre'], "👤") +
+        _ticket_row("Correo", t['correo'], "📧") +
+        _ticket_row("Teléfono", t.get('telefono', ''), "📞") +
+        _ticket_row("Asunto", t['asunto'], "📌") +
+        _ticket_row("Ciudad", t.get('ciudad', ''), "🏛️") +
+        _ticket_row("Despacho", t.get('despacho', ''), "🏢") +
+        _ticket_row("Descripción", t.get('descripcion', ''), "📝")
+    )
+
+    # Filas extra para memorial
+    if es_memorial:
+        rows += (
+            _ticket_row("Quien radica", t.get('quien_radica', ''), "🧑‍⚖️") +
             _ticket_row("Tipo memorial", t.get('tipo_memorial', ''), "📄") +
             _ticket_row("Nro. proceso", t.get('numero_proceso', ''), "📁") +
-            _ticket_row("Enlace archivos", t.get('link_drive', ''), "📎")
+            _link_row("Archivos adjuntos", t.get('link_drive', ''))
         )
+
+    rows += (
+        _ticket_row("Fecha", t.get('fecha_creacion', ''), "📅") +
+        _ticket_row("Estado", "Pendiente", "⏳")
+    )
 
     content = f"""
     <div style="text-align:center;margin-bottom:25px;">
-      <span style="display:inline-block;background:#DCFCE7;color:#166534;padding:6px 16px;border-radius:20px;font-size:12px;font-weight:600;letter-spacing:1px;">{badge_text}</span>
+      <span style="display:inline-block;background:#DCFCE7;color:#166534;padding:6px 18px;border-radius:20px;font-size:12px;font-weight:700;letter-spacing:1px;">{badge_text}</span>
     </div>
     <p style="color:#334155;font-size:15px;line-height:1.6;">Estimado/a <strong>{t['nombre']}</strong>,</p>
     <p style="color:#334155;font-size:15px;line-height:1.6;">{intro_text}</p>
     <div style="background:#EFF6FF;border:2px solid #3B82F6;border-radius:10px;padding:24px;text-align:center;margin:25px 0;">
-      <p style="margin:0 0 4px;color:#64748B;font-size:12px;text-transform:uppercase;letter-spacing:1px;">Su número de ticket</p>
+      <p style="margin:0 0 4px;color:#64748B;font-size:11px;text-transform:uppercase;letter-spacing:1px;">Su número de ticket</p>
       <p style="margin:0;color:#1E40AF;font-size:32px;font-weight:800;letter-spacing:2px;">{t['ticket']}</p>
       <p style="margin:8px 0 0;color:#64748B;font-size:12px;">Guarde este número para consultar el estado de su solicitud</p>
     </div>
     <table width="100%" cellpadding="0" cellspacing="0" style="border:1px solid #E2E8F0;border-radius:8px;overflow:hidden;margin-bottom:20px;">
-      {_ticket_row("Asunto", t['asunto'], "📌")}
-      {_ticket_row("Ciudad", t.get('ciudad', ''), "🏛️")}
-      {_ticket_row("Despacho", t.get('despacho', ''), "🏢")}
-      {memorial_rows}
-      {_ticket_row("Fecha", t.get('fecha_creacion', ''), "📅")}
-      {_ticket_row("Estado", "Pendiente", "⏳")}
+      {rows}
     </table>
     <div style="background:#F8FAFC;border-radius:8px;padding:16px 20px;border-left:4px solid #3B82F6;">
       <p style="margin:0;color:#475569;font-size:13px;line-height:1.6;"><strong>¿Qué sigue?</strong> Nuestro equipo revisará su solicitud y le notificaremos cualquier cambio de estado por correo electrónico.</p>
@@ -471,29 +506,35 @@ def status_email_html(t):
         badge_bg = '#DCFCE7'
         badge_color = '#166534'
         badge_icon = '✅'
-        mensaje = 'Su solicitud ha sido resuelta. Si tiene alguna duda adicional, no dude en crear un nuevo ticket.'
+        mensaje = 'Su solicitud ha sido <strong>resuelta</strong> por nuestro equipo de soporte técnico. Si tiene alguna duda adicional o requiere asistencia, no dude en crear un nuevo ticket.'
     elif estado == 'En proceso':
         badge_bg = '#FEF3C7'
         badge_color = '#92400E'
         badge_icon = '🔄'
-        mensaje = 'Su solicitud está siendo atendida por nuestro equipo técnico. Le notificaremos cuando haya novedades.'
+        mensaje = 'Su solicitud está siendo <strong>atendida</strong> por nuestro equipo técnico. Le notificaremos por correo electrónico cuando haya novedades o se resuelva.'
     else:
         badge_bg = '#FEE2E2'
         badge_color = '#991B1B'
         badge_icon = '⏳'
-        mensaje = 'Su solicitud se encuentra pendiente de revisión.'
+        mensaje = 'Su solicitud se encuentra <strong>pendiente</strong> de revisión por nuestro equipo.'
 
     content = f"""
     <div style="text-align:center;margin-bottom:25px;">
-      <span style="display:inline-block;background:{badge_bg};color:{badge_color};padding:6px 16px;border-radius:20px;font-size:12px;font-weight:600;letter-spacing:1px;">ACTUALIZACIÓN DE ESTADO</span>
+      <span style="display:inline-block;background:{badge_bg};color:{badge_color};padding:6px 18px;border-radius:20px;font-size:12px;font-weight:700;letter-spacing:1px;">ACTUALIZACIÓN DE SOLICITUD</span>
     </div>
     <p style="color:#334155;font-size:15px;line-height:1.6;">Estimado/a <strong>{t.get('nombre', '')}</strong>,</p>
-    <p style="color:#334155;font-size:15px;line-height:1.6;">Le informamos que el estado de su ticket ha sido actualizado:</p>
-    <div style="background:#EFF6FF;border:2px solid #3B82F6;border-radius:10px;padding:20px;text-align:center;margin:25px 0;">
-      <p style="margin:0 0 4px;color:#64748B;font-size:12px;text-transform:uppercase;letter-spacing:1px;">Ticket</p>
+    <p style="color:#334155;font-size:15px;line-height:1.6;">Le informamos que el estado de su solicitud ha sido actualizado:</p>
+    <div style="background:#EFF6FF;border:2px solid #3B82F6;border-radius:10px;padding:24px;text-align:center;margin:25px 0;">
+      <p style="margin:0 0 4px;color:#64748B;font-size:11px;text-transform:uppercase;letter-spacing:1px;">Ticket</p>
       <p style="margin:0 0 16px;color:#1E40AF;font-size:24px;font-weight:800;letter-spacing:2px;">{t['ticket']}</p>
-      <span style="display:inline-block;background:{badge_bg};color:{badge_color};padding:8px 24px;border-radius:25px;font-size:16px;font-weight:700;">{badge_icon} {estado}</span>
+      <span style="display:inline-block;background:{badge_bg};color:{badge_color};padding:10px 28px;border-radius:25px;font-size:16px;font-weight:700;">{badge_icon} {estado}</span>
     </div>
+    <table width="100%" cellpadding="0" cellspacing="0" style="border:1px solid #E2E8F0;border-radius:8px;overflow:hidden;margin-bottom:20px;">
+      {_ticket_row("Nombre", t.get('nombre', ''), "👤")}
+      {_ticket_row("Asunto", t.get('asunto', ''), "📌")}
+      {_ticket_row("Despacho", t.get('despacho', ''), "🏢")}
+      {_ticket_row("Nuevo estado", estado, badge_icon)}
+    </table>
     <div style="background:#F8FAFC;border-radius:8px;padding:16px 20px;border-left:4px solid #3B82F6;">
       <p style="margin:0;color:#475569;font-size:13px;line-height:1.6;">{mensaje}</p>
     </div>
