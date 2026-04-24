@@ -3,9 +3,11 @@ import sqlite3
 import datetime
 import smtplib
 import requests
+import io
+import pandas as pd
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request, jsonify, send_file
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -641,6 +643,42 @@ def soporte():
     return jsonify({"status": "ok", "ticket": ticket_id})
 
 
+
+@app.route('/exportar_tickets')
+def exportar_tickets():
+    conn = get_conn()
+    cur = db_cursor(conn)
+    cur.execute("SELECT * FROM tickets ORDER BY id DESC")
+    rows = cur.fetchall()
+    conn.close()
+
+    tickets = [dict(r) for r in rows]
+
+    df = pd.DataFrame(tickets, columns=[
+        'ticket', 'tipo_solicitud', 'nombre', 'correo', 'telefono',
+        'ciudad', 'despacho', 'tipo_usuario', 'asunto', 'numero_proceso',
+        'descripcion', 'estado', 'fecha_creacion', 'quien_radica',
+        'tipo_memorial', 'link_drive'
+    ])
+
+    df.columns = [
+        'Ticket', 'Tipo solicitud', 'Nombre', 'Correo', 'Teléfono',
+        'Ciudad', 'Despacho', 'Tipo usuario', 'Asunto', 'Nro. proceso',
+        'Descripción', 'Estado', 'Fecha creación', 'Quien radica',
+        'Tipo memorial', 'Enlace archivos'
+    ]
+
+    output = io.BytesIO()
+    with pd.ExcelWriter(output, engine='openpyxl') as writer:
+        df.to_excel(writer, index=False, sheet_name='Tickets')
+    output.seek(0)
+
+    return send_file(
+        output,
+        mimetype='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+        as_attachment=True,
+        download_name='tickets.xlsx'
+    )
 
 
 @app.route('/api/admin', methods=['POST'])
