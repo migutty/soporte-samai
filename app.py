@@ -667,7 +667,7 @@ def soporte():
         user_subject,
         user_email_html(ticket_data)
     )
-        @app.route('/segunda-instancia', methods=['GET', 'POST'])
+@app.route('/segunda-instancia', methods=['GET', 'POST'])
 def segunda_instancia():
     clave_correcta = os.getenv("SEGUNDA_CLAVE", "12345")
 
@@ -679,7 +679,7 @@ def segunda_instancia():
         else:
             return render_template("segunda_login.html", error="Clave incorrecta")
 
-    return render_template("segunda_login.html")
+     return render_template("segunda_login.html")  
 
     # ===== WHATSAPP AL ADMIN =====
     try:
