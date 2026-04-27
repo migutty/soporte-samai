@@ -1,2 +1,3 @@
 #!/usr/bin/env bash
-python app.py
+#!/usr/bin/env bash
+gunicorn app:app
