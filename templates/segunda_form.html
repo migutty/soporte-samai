@@ -11,26 +11,42 @@
             font-family: Arial;
             background: #0b1220;
             color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
         }
 
-        .header {
+        .container {
             text-align: center;
-            padding: 20px;
+            background: #111827;
+            padding: 40px;
+            border-radius: 20px;
+            max-width: 500px;
         }
 
         h1 {
             color: #60a5fa;
+            margin-bottom: 15px;
         }
 
-        .frame-container {
-            width: 100%;
-            height: calc(100vh - 100px);
+        p {
+            color: #cbd5e1;
+            margin-bottom: 25px;
         }
 
-        iframe {
-            width: 100%;
-            height: 100%;
-            border: none;
+        .btn {
+            background: #2563eb;
+            padding: 15px 25px;
+            border-radius: 10px;
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            display: inline-block;
+        }
+
+        .btn:hover {
+            background: #1d4ed8;
         }
     </style>
 
@@ -38,13 +54,13 @@
 
 <body>
 
-    <div class="header">
+    <div class="container">
         <h1>Formulario Segunda Instancia</h1>
-        <p>Uso exclusivo para secretarías</p>
-    </div>
+        <p>Este formulario se encuentra en el sistema de remisiones.</p>
 
-    <div class="frame-container">
-        <iframe src="https://remisiones-samai.onrender.com/"></iframe>
+        <a href="https://remisiones-samai.onrender.com/" target="_blank" class="btn">
+            Abrir formulario completo
+        </a>
     </div>
 
 </body>
