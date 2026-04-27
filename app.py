@@ -17,6 +17,33 @@ app = Flask(__name__)
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 DB_PATH = os.path.join(BASE_DIR, "tickets.db")
 
+import sqlite3
+
+def init_segunda_instancia():
+    conn = sqlite3.connect('tickets.db')
+    c = conn.cursor()
+
+    c.execute('''
+    CREATE TABLE IF NOT EXISTS segunda_instancia (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        nombre TEXT,
+        despacho TEXT,
+        proceso TEXT,
+        tipo_actuacion TEXT,
+        demandante TEXT,
+        demandado TEXT,
+        correo TEXT,
+        link TEXT,
+        observaciones TEXT,
+        fecha TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    )
+    ''')
+
+    conn.commit()
+    conn.close()
+
+init_segunda_instancia()
+
 # ===== CONFIG CORREO =====
 MAIL_SERVER = os.getenv("MAIL_SERVER", "smtp.gmail.com")
 MAIL_PORT = int(os.getenv("MAIL_PORT", "587"))
@@ -578,19 +605,7 @@ def status_email_html(t):
 def index():
     return render_template('index.html')
 
-@app.route('/segunda-instancia', methods=['GET', 'POST'])
-def segunda_instancia():
-    clave_correcta = os.getenv("SEGUNDA_CLAVE", "12345")
 
-    if request.method == 'POST':
-        clave = request.form.get("clave")
-
-        if clave == clave_correcta:
-            return render_template("segunda_form.html")
-        else:
-            return render_template("segunda_login.html", error="Clave incorrecta")
-
-    return render_template("segunda_login.html")
 
 
 @app.route('/api/soporte', methods=['POST'])

@@ -11,42 +11,51 @@
             font-family: Arial;
             background: #0b1220;
             color: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
         }
 
         .container {
-            text-align: center;
+            max-width: 900px;
+            margin: 40px auto;
             background: #111827;
-            padding: 40px;
-            border-radius: 20px;
-            max-width: 500px;
+            padding: 30px;
+            border-radius: 15px;
         }
 
         h1 {
             color: #60a5fa;
+            text-align: center;
+        }
+
+        input,
+        textarea,
+        select {
+            width: 100%;
+            padding: 12px;
+            margin-top: 10px;
             margin-bottom: 15px;
-        }
-
-        p {
-            color: #cbd5e1;
-            margin-bottom: 25px;
-        }
-
-        .btn {
-            background: #2563eb;
-            padding: 15px 25px;
-            border-radius: 10px;
+            border-radius: 8px;
+            border: none;
+            background: #1f2937;
             color: white;
-            text-decoration: none;
-            font-weight: bold;
-            display: inline-block;
         }
 
-        .btn:hover {
-            background: #1d4ed8;
+        button {
+            width: 100%;
+            padding: 15px;
+            background: #2563eb;
+            border: none;
+            color: white;
+            font-weight: bold;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+
+        .success {
+            background: #16a34a;
+            padding: 10px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+            text-align: center;
         }
     </style>
 
@@ -55,12 +64,37 @@
 <body>
 
     <div class="container">
-        <h1>Formulario Segunda Instancia</h1>
-        <p>Este formulario se encuentra en el sistema de remisiones.</p>
 
-        <a href="https://remisiones-samai.onrender.com/" target="_blank" class="btn">
-            Abrir formulario completo
-        </a>
+        <h1>Formulario Segunda Instancia</h1>
+
+        {% if success %}
+        <div class="success">Formulario enviado correctamente</div>
+        {% endif %}
+
+        <form method="POST">
+
+            <input name="nombre" placeholder="Nombre" required>
+            <input name="despacho" placeholder="Despacho" required>
+            <input name="proceso" placeholder="Número de proceso" required>
+
+            <select name="tipo_actuacion" required>
+                <option value="">Tipo de actuación</option>
+                <option>Apelación</option>
+                <option>Consulta</option>
+                <option>Remisión</option>
+            </select>
+
+            <input name="demandante" placeholder="Demandante">
+            <input name="demandado" placeholder="Demandado">
+            <input name="correo" placeholder="Correo">
+            <input name="link_expediente" placeholder="Link expediente" required>
+
+            <textarea name="observaciones" placeholder="Observaciones"></textarea>
+
+            <button type="submit">Enviar</button>
+
+        </form>
+
     </div>
 
 </body>
