@@ -578,6 +578,20 @@ def status_email_html(t):
 def index():
     return render_template('index.html')
 
+@app.route('/segunda-instancia', methods=['GET', 'POST'])
+def segunda_instancia():
+    clave_correcta = os.getenv("SEGUNDA_CLAVE", "12345")
+
+    if request.method == 'POST':
+        clave = request.form.get("clave")
+
+        if clave == clave_correcta:
+            return render_template("segunda_form.html")
+        else:
+            return render_template("segunda_login.html", error="Clave incorrecta")
+
+    return render_template("segunda_login.html")
+
 
 @app.route('/api/soporte', methods=['POST'])
 def soporte():
@@ -667,19 +681,6 @@ def soporte():
         user_subject,
         user_email_html(ticket_data)
     )
-    @app.route('/segunda-instancia', methods=['GET', 'POST'])
-    def segunda_instancia():
-        clave_correcta = os.getenv("SEGUNDA_CLAVE", "12345")
-
-        if request.method == 'POST':
-            clave = request.form.get("clave")
-
-            if clave == clave_correcta:
-                return render_template("segunda_form.html")
-            else:
-                return render_template("segunda_login.html", error="Clave incorrecta")
-
-        return render_template("segunda_login.html")
     
     # ===== WHATSAPP AL ADMIN =====
     try:
