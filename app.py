@@ -88,7 +88,46 @@ def db_cursor(conn):
     if USE_PG:
         return conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
     return conn.cursor()
+# ===== SEGUNDA INSTANCIA =====
+@app.route('/segunda-instancia', methods=['GET', 'POST'])
+def segunda_instancia():
+    clave_correcta = os.getenv("SEGUNDA_CLAVE", "12345")
 
+    if request.method == 'POST':
+
+        # LOGIN
+        if 'clave' in request.form:
+            if request.form.get("clave") == clave_correcta:
+                return render_template("segunda_form.html")
+            else:
+                return render_template("segunda_login.html", error="Clave incorrecta")
+
+        # FORMULARIO
+        nombre = request.form.get("nombre")
+        despacho = request.form.get("despacho")
+        proceso = request.form.get("proceso")
+        tipo = request.form.get("tipo_actuacion")
+        demandante = request.form.get("demandante")
+        demandado = request.form.get("demandado")
+        correo = request.form.get("correo")
+        link = request.form.get("link_expediente")
+        observaciones = request.form.get("observaciones")
+
+        conn = sqlite3.connect(DB_PATH)
+        c = conn.cursor()
+
+        c.execute('''
+            INSERT INTO segunda_instancia 
+            (nombre, despacho, proceso, tipo_actuacion, demandante, demandado, correo, link, observaciones)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+        ''', (nombre, despacho, proceso, tipo, demandante, demandado, correo, link, observaciones))
+
+        conn.commit()
+        conn.close()
+
+        return render_template("segunda_form.html", success=True)
+
+    return render_template("segunda_login.html")
 
 def init_db():
     conn = get_conn()
