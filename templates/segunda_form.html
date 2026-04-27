@@ -1,7 +1,277 @@
-<h2>Formulario Segunda Instancia</h2>
+<!DOCTYPE html>
+<html lang="es">
 
-<form>
-    <input type="text" placeholder="Nombre">
-    <input type="text" placeholder="Proceso">
-    <button>Enviar</button>
-</form>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulario Segunda Instancia</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: "Segoe UI", Arial, sans-serif;
+            background: radial-gradient(circle at top left, #10203a, #060914 60%);
+            color: #ffffff;
+            min-height: 100vh;
+        }
+
+        .page {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 35px;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 8px 18px;
+            border: 1px solid #3b82f6;
+            color: #60a5fa;
+            border-radius: 999px;
+            font-size: 13px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            font-weight: 700;
+            margin-bottom: 18px;
+        }
+
+        h1 {
+            font-size: 42px;
+            margin: 0;
+            line-height: 1.1;
+        }
+
+        h1 span {
+            color: #60a5fa;
+        }
+
+        .subtitle {
+            margin-top: 15px;
+            color: #cbd5e1;
+            font-size: 17px;
+            line-height: 1.6;
+        }
+
+        .card {
+            background: rgba(20, 24, 35, 0.92);
+            border: 1px solid rgba(148, 163, 184, 0.18);
+            border-radius: 22px;
+            padding: 30px;
+            box-shadow: 0 25px 70px rgba(0, 0, 0, 0.35);
+        }
+
+        .notice {
+            background: rgba(59, 130, 246, 0.12);
+            border: 1px solid rgba(59, 130, 246, 0.35);
+            border-radius: 16px;
+            padding: 18px;
+            margin-bottom: 25px;
+            color: #dbeafe;
+            line-height: 1.6;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 18px;
+        }
+
+        .field {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .field.full {
+            grid-column: 1 / -1;
+        }
+
+        label {
+            color: #e5e7eb;
+            font-weight: 700;
+            font-size: 14px;
+        }
+
+        input,
+        select,
+        textarea {
+            width: 100%;
+            background: #0f1219;
+            border: 1px solid #2b3242;
+            color: #ffffff;
+            padding: 15px;
+            border-radius: 13px;
+            font-size: 15px;
+            outline: none;
+        }
+
+        input:focus,
+        select:focus,
+        textarea:focus {
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.18);
+        }
+
+        textarea {
+            min-height: 130px;
+            resize: vertical;
+        }
+
+        .actions {
+            display: flex;
+            justify-content: space-between;
+            gap: 15px;
+            margin-top: 28px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            border: none;
+            cursor: pointer;
+            padding: 15px 24px;
+            border-radius: 14px;
+            font-size: 15px;
+            font-weight: 800;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 180px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #3b82f6, #2563eb);
+            color: #ffffff;
+            box-shadow: 0 12px 28px rgba(37, 99, 235, 0.35);
+        }
+
+        .btn-secondary {
+            background: #1f2937;
+            color: #ffffff;
+            border: 1px solid #374151;
+        }
+
+        .footer {
+            text-align: center;
+            color: #64748b;
+            font-size: 13px;
+            margin-top: 25px;
+        }
+
+        @media (max-width: 800px) {
+            h1 {
+                font-size: 32px;
+            }
+
+            .grid {
+                grid-template-columns: 1fr;
+            }
+
+            .card {
+                padding: 22px;
+            }
+
+            .btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <main class="page">
+        <section class="header">
+            <div class="badge">Acceso autorizado</div>
+            <h1>Formulario <span>Segunda Instancia</span></h1>
+            <p class="subtitle">
+                Uso exclusivo para secretarías de los juzgados administrativos de Tunja.
+            </p>
+        </section>
+
+        <section class="card">
+            <div class="notice">
+                <strong>Importante:</strong><br>
+                Este formulario es de uso restringido para el trámite interno de segunda instancia.
+                Verifique cuidadosamente la información antes de enviar.
+            </div>
+
+            <form method="POST" action="#">
+                <div class="grid">
+                    <div class="field">
+                        <label for="nombre">Nombre de quien registra</label>
+                        <input type="text" id="nombre" name="nombre" placeholder="Nombre completo" required>
+                    </div>
+
+                    <div class="field">
+                        <label for="despacho">Despacho judicial</label>
+                        <input type="text" id="despacho" name="despacho"
+                            placeholder="Ej: Juzgado 001 Administrativo de Tunja" required>
+                    </div>
+
+                    <div class="field">
+                        <label for="proceso">Número de proceso</label>
+                        <input type="text" id="proceso" name="proceso" placeholder="Ingrese número de proceso" required>
+                    </div>
+
+                    <div class="field">
+                        <label for="tipo_actuacion">Tipo de actuación</label>
+                        <select id="tipo_actuacion" name="tipo_actuacion" required>
+                            <option value="">Seleccione una opción</option>
+                            <option>Apelación</option>
+                            <option>Consulta</option>
+                            <option>Reparto segunda instancia</option>
+                            <option>Remisión expediente</option>
+                            <option>Otro</option>
+                        </select>
+                    </div>
+
+                    <div class="field">
+                        <label for="demandante">Demandante</label>
+                        <input type="text" id="demandante" name="demandante" placeholder="Nombre del demandante">
+                    </div>
+
+                    <div class="field">
+                        <label for="demandado">Demandado</label>
+                        <input type="text" id="demandado" name="demandado" placeholder="Nombre del demandado">
+                    </div>
+
+                    <div class="field">
+                        <label for="correo">Correo de contacto</label>
+                        <input type="email" id="correo" name="correo" placeholder="correo@dominio.com">
+                    </div>
+
+                    <div class="field">
+                        <label for="link_expediente">Link del expediente o documentos</label>
+                        <input type="url" id="link_expediente" name="link_expediente"
+                            placeholder="https://drive.google.com/..." required>
+                    </div>
+
+                    <div class="field full">
+                        <label for="observaciones">Observaciones</label>
+                        <textarea id="observaciones" name="observaciones"
+                            placeholder="Escriba observaciones adicionales..."></textarea>
+                    </div>
+                </div>
+
+                <div class="actions">
+                    <a href="/" class="btn btn-secondary">Volver al inicio</a>
+                    <button type="submit" class="btn btn-primary">Enviar formulario</button>
+                </div>
+            </form>
+        </section>
+
+        <div class="footer">
+            Sistema de soporte SAMAI · Segunda instancia
+        </div>
+    </main>
+</body>
+
+</html>
