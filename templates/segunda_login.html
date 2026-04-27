@@ -1,0 +1,10 @@
+<h2>Acceso restringido</h2>
+
+<form method="POST">
+    <input type="password" name="clave" placeholder="Ingrese clave" required>
+    <button type="submit">Ingresar</button>
+</form>
+
+{% if error %}
+<p style="color:red;">{{ error }}</p>
+{% endif %}
