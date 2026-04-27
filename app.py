@@ -667,7 +667,7 @@ def soporte():
         user_subject,
         user_email_html(ticket_data)
     )
-    @app.route('/segunda-instancia', methods=['GET', 'POST'])
+        @app.route('/segunda-instancia', methods=['GET', 'POST'])
 def segunda_instancia():
     clave_correcta = os.getenv("SEGUNDA_CLAVE", "12345")
 
