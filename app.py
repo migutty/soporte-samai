@@ -9,10 +9,13 @@ from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from flask import Flask, render_template, request, jsonify, send_file
 from dotenv import load_dotenv
+from flask import session
 
 load_dotenv()
 
 app = Flask(__name__)
+
+app.secret_key = os.getenv("SECRET_KEY", "clave-super-segura")
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 DB_PATH = os.path.join(BASE_DIR, "tickets.db")
@@ -89,14 +92,22 @@ def db_cursor(conn):
         return conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
     return conn.cursor()
 # ===== SEGUNDA INSTANCIA =====
+from flask import session
+
+# ===== SEGUNDA INSTANCIA =====
 @app.route('/segunda-instancia', methods=['GET', 'POST'])
 def segunda_instancia():
     clave_correcta = os.getenv("SEGUNDA_CLAVE", "12345")
+
+    # 🔓 SI YA INGRESÓ → entra directo
+    if session.get("segunda_ok"):
+        return render_template("segunda_redirect.html")
 
     if request.method == 'POST':
         clave = request.form.get("clave")
 
         if clave == clave_correcta:
+            session["segunda_ok"] = True  # ✅ guarda sesión
             return render_template("segunda_redirect.html")
         else:
             return render_template("segunda_login.html", error="Clave incorrecta")
