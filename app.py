@@ -50,8 +50,8 @@ init_segunda_instancia()
 # ===== CONFIG CORREO =====
 MAIL_SERVER = os.getenv("MAIL_SERVER", "smtp.gmail.com")
 MAIL_PORT = int(os.getenv("MAIL_PORT", "587"))
-MAIL_USERNAME = os.getenv("MAIL_USERNAME", "")
-MAIL_PASSWORD = os.getenv("MAIL_PASSWORD", "")
+MAIL_USERNAME = os.getenv("MAIL_USERNAME", "").strip()
+MAIL_PASSWORD = os.getenv("MAIL_PASSWORD", "").strip()
 MAIL_USE_TLS = os.getenv("MAIL_USE_TLS", "True").lower() == "true"
 MAIL_DEFAULT_SENDER = os.getenv("MAIL_DEFAULT_SENDER", MAIL_USERNAME)
 ADMIN_NOTIFICATION_EMAIL = os.getenv("ADMIN_NOTIFICATION_EMAIL", MAIL_USERNAME)
@@ -305,7 +305,7 @@ def send_email(to_email, subject, html_body, text_body=None):
             msg.attach(MIMEText(text_body, "plain", "utf-8"))
         msg.attach(MIMEText(html_body, "html", "utf-8"))
 
-        server = smtplib.SMTP(MAIL_SERVER, MAIL_PORT)
+        server = smtplib.SMTP(MAIL_SERVER, MAIL_PORT, timeout=10)
         server.ehlo()
 
         if MAIL_USE_TLS:
