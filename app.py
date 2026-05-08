@@ -2,6 +2,7 @@ import os
 import sqlite3
 import datetime
 import smtplib
+from xmlrpc import server
 import requests
 import io
 import pandas as pd
@@ -305,11 +306,10 @@ def send_email(to_email, subject, html_body, text_body=None):
             msg.attach(MIMEText(text_body, "plain", "utf-8"))
         msg.attach(MIMEText(html_body, "html", "utf-8"))
 
-        server = smtplib.SMTP(MAIL_SERVER, MAIL_PORT, timeout=10)
+        server = smtplib.SMTP_SSL("smtp.gmail.com", 465, timeout=10)
         server.ehlo()
 
         if MAIL_USE_TLS:
-            server.starttls()
             server.ehlo()
 
         server.login(MAIL_USERNAME, MAIL_PASSWORD)
