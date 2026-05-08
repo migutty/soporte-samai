@@ -291,34 +291,49 @@ def calcular_tiempo_atencion(ticket_id):
 
 
 # ===== CORREO =====
-def send_email(to_email, subject, html_body, text_body=None):
-    if not MAIL_USERNAME or not MAIL_PASSWORD or not to_email:
-        print("[MAIL] Config incompleta")
-        return False, "Config incompleta"
+ddef send_email(to_email, subject, html_body, text_body=None):
+    import requests
+    import os
 
     try:
-        msg = MIMEMultipart("alternative")
-        msg["Subject"] = subject
-        msg["From"] = MAIL_DEFAULT_SENDER
-        msg["To"] = to_email
+        url = "https://api.brevo.com/v3/smtp/email"
 
-        if text_body:
-            msg.attach(MIMEText(text_body, "plain", "utf-8"))
-        msg.attach(MIMEText(html_body, "html", "utf-8"))
+        payload = {
+            "sender": {
+                "name": "Soporte SAMAI",
+                "email": MAIL_DEFAULT_SENDER
+            },
+            "to": [
+                {
+                    "email": to_email
+                }
+            ],
+            "subject": subject,
+            "htmlContent": html_body
+        }
 
-        server = smtplib.SMTP_SSL("smtp.gmail.com", 465, timeout=10)
-        server.ehlo()
+        headers = {
+            "accept": "application/json",
+            "api-key": os.getenv("BREVO_API_KEY"),
+            "content-type": "application/json"
+        }
 
-        if MAIL_USE_TLS:
-            server.ehlo()
+        response = requests.post(
+            url,
+            json=payload,
+            headers=headers,
+            timeout=15
+        )
 
-        server.login(MAIL_USERNAME, MAIL_PASSWORD)
-        server.sendmail(MAIL_DEFAULT_SENDER, [to_email], msg.as_string())
-        server.quit()
+        print("[BREVO]", response.status_code, response.text)
 
-        return True, None
+        if response.status_code in [200, 201]:
+            return True, None
+
+        return False, response.text
+
     except Exception as e:
-        print(f"[MAIL ERROR] {e}")
+        print(f"[BREVO ERROR] {e}")
         return False, str(e)
 
 
