@@ -291,7 +291,7 @@ def calcular_tiempo_atencion(ticket_id):
 
 
 # ===== CORREO =====
-ddef send_email(to_email, subject, html_body, text_body=None):
+def send_email(to_email, subject, html_body, text_body=None):
     import requests
     import os
 
