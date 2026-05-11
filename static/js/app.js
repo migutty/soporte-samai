@@ -853,7 +853,7 @@ if (adminLoginForm && adminUsernameInput && adminPasswordInput && adminLoginMsg 
           role: result.role
         };
         adminDashboard.style.display = 'block';
-        loadAdminDashboard();
+        //loadAdminDashboard();
       } else {
         adminLoginMsg.textContent = 'Credenciales incorrectas.';
         adminLoginMsg.style.display = 'flex';
