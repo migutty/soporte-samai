@@ -737,25 +737,23 @@ function renderCharts(data) {
     });
   }
 }
-
 async function loadAdminDashboard() {
 
-  console.log("LOAD DASHBOARD");
-
   try {
-
-    console.log("ANTES FETCH");
-
     const data = await adminPost({
       action: 'get_stats',
-      username: adminSession.username,
-      password: adminSession.password
+      username: 'admin',
+      password: '123456'
     });
+
+    if (data.status !== 'ok') {
+      throw new Error(data.message || 'No autorizado');
+    }
 
     console.log(data);
 
   } catch (error) {
-    console.error("ERROR DASHBOARD:", error);
+    console.error(error);
   }
 }
 
@@ -848,7 +846,7 @@ if (adminLoginForm && adminUsernameInput && adminPasswordInput && adminLoginMsg 
         password
       });
 
-      if (data.status !== "success")  {
+      if (data.status !== "success") { {
         adminSession = {
           username,
           password,
