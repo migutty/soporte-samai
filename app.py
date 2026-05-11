@@ -794,14 +794,10 @@ def exportar_tickets():
 @app.route('/api/admin', methods=['POST'])
 def admin_panel():
 
-    # El frontend envía URLSearchParams/FormData, por eso leemos request.form.
-    # También aceptamos JSON por si luego se cambia el frontend.
-    data = request.get_json(silent=True) or {}
-    user = request.form.get('username') or data.get('username')
-    pwd = request.form.get('password') or data.get('password')
-    action = request.form.get('action') or data.get('action')
+    user = request.form.get('user')
+    pwd = request.form.get('pwd')
+    action = request.form.get('action')
 
-    # Validación temporal/simple del panel admin.
     if user != "admin" or pwd != "123456":
         return jsonify({
             "status": "error",
