@@ -796,6 +796,8 @@ def admin_panel():
     user = request.form.get('username')
     pwd = request.form.get('password')
     action = request.form.get('action')
+    print("USER:", user)
+    print("PWD:", pwd)
 
     if user != ADMIN_USER or pwd != "123456":
        return jsonify({"status": "error", "message": "Credenciales incorrectas"}), 403
