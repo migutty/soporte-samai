@@ -624,7 +624,7 @@ def status_email_html(t):
     <p style="color:#334155;font-size:15px;line-height:1.6;">Le informamos que el estado de su solicitud ha sido actualizado:</p>
     <div style="background:#EFF6FF;border:2px solid #3B82F6;border-radius:10px;padding:24px;text-align:center;margin:25px 0;">
       <p style="margin:0 0 4px;color:#64748B;font-size:11px;text-transform:uppercase;letter-spacing:1px;">Ticket</p>
-      <p style="margin:0 0 16px;color:#1E40AF;font-size:24px;font-weight:800;letter-spacing:2px;">{t['ticket']}</p>
+      <p style="margin:0 0 16px;color:#1E40AF;font-size:24px;font-weight:800;letter-spacing:2px;">{t['ticket_id']}</p>
       <span style="display:inline-block;background:{badge_bg};color:{badge_color};padding:10px 28px;border-radius:25px;font-size:16px;font-weight:700;">{badge_icon} {estado}</span>
     </div>
     <table width="100%" cellpadding="0" cellspacing="0" style="border:1px solid #E2E8F0;border-radius:8px;overflow:hidden;margin-bottom:20px;">
