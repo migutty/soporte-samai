@@ -822,7 +822,7 @@ def admin_panel():
 
         # Calcular tiempo de atención por ticket
         for t in tickets:
-            t['tiempo_atencion'] = calcular_tiempo_atencion(t['ticket'])
+            t['tiempo_atencion'] = calcular_tiempo_atencion(t['ticket_id'])
 
         total = len(tickets)
         pendientes = sum(1 for t in tickets if t["estado"] == "Pendiente")
