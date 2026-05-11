@@ -807,6 +807,7 @@ def admin_panel():
     role = "admin"
 
     
+
     # ===== ESTADÍSTICAS =====
     if action == 'get_stats':
         conn = get_conn()
