@@ -860,7 +860,7 @@ def admin_panel():
 
         conn = get_conn()
         cur = db_cursor(conn)
-        cur.execute("UPDATE tickets SET estado = %s WHERE ticket = %s", (nuevo_estado, ticket_id))
+        cur.execute("UPDATE tickets SET estado = %s WHERE ticket_id = %s", (nuevo_estado, ticket_id))
         conn.commit()
 
         # ===== HISTORIAL: CAMBIO DE ESTADO =====
@@ -870,7 +870,7 @@ def admin_panel():
         )
         conn.commit()
 
-        cur.execute("SELECT * FROM tickets WHERE ticket = %s", (ticket_id,))
+        cur.execute("SELECT * FROM tickets WHERE ticket_id = %s", (ticket_id,))
         row = cur.fetchone()
         conn.close()
 
