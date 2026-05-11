@@ -473,14 +473,11 @@ if (adminLoginForm && adminUsernameInput && adminPasswordInput && adminLoginMsg 
     adminLoginMsg.style.display = 'none';
     adminLoginMsg.textContent = '';
 
-    const username = adminUsernameInput.value.trim();
-    const password = adminPasswordInput.value.trim();
+    adminDashboard.style.display = 'block';
 
-    if (!username || !password) {
-      adminLoginMsg.textContent = 'Ingresa usuario y contraseña.';
-      adminLoginMsg.style.display = 'flex';
-      return;
-    }
+    loadAdminDashboard();
+  });
+}
 
     try {
       const result = await adminPost({
