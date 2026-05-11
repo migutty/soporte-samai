@@ -813,7 +813,8 @@ def admin_panel():
 
     return jsonify({
     "status": "ok",
-    "message": "LOGIN FUNCIONA"
+    "message": "LOGIN FUNCIONA",
+    "role": "admin"
 })
 
     # Login inicial del panel. El JS espera status == "ok".
