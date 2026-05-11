@@ -794,10 +794,14 @@ def exportar_tickets():
 @app.route('/api/admin', methods=['POST'])
 def admin_panel():
 
-    user = request.form.get('username')
-    pwd = request.form.get('password')
-    action = request.form.get('action')
+    # El frontend envía URLSearchParams/FormData, por eso leemos request.form.
+    # También aceptamos JSON por si luego se cambia el frontend.
+    data = request.get_json(silent=True) or {}
+    user = request.form.get('username') or data.get('username')
+    pwd = request.form.get('password') or data.get('password')
+    action = request.form.get('action') or data.get('action')
 
+    # Validación temporal/simple del panel admin.
     if user != "admin" or pwd != "123456":
         return jsonify({
             "status": "error",
@@ -806,7 +810,12 @@ def admin_panel():
 
     role = "admin"
 
-    
+    # Login inicial del panel. El JS espera status == "ok".
+    if action == 'admin_login':
+        return jsonify({
+            "status": "ok",
+            "role": role
+        })
 
     # ===== ESTADÍSTICAS =====
     if action == 'get_stats':
@@ -817,10 +826,15 @@ def admin_panel():
         conn.close()
 
         tickets = [dict(r) for r in rows]
+
+        # Compatibilidad con el frontend antiguo: app.js usa item.ticket.
+        # En Supabase la columna real es ticket_id.
+        for t in tickets:
+            t['ticket'] = t.get('ticket_id')
  
         # Calcular tiempo de atención por ticket
         for t in tickets:
-            t['tiempo_atencion'] = calcular_tiempo_atencion(t['ticket_id'])
+            t['tiempo_atencion'] = calcular_tiempo_atencion(t.get('ticket_id'))
 
         total = len(tickets)
         pendientes = sum(1 for t in tickets if t["estado"] == "Pendiente")
