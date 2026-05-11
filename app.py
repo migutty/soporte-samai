@@ -793,20 +793,22 @@ def exportar_tickets():
 
 @app.route('/api/admin', methods=['POST'])
 def admin_panel():
-    user = request.form.get('username')
-    pwd = request.form.get('password')
-    action = request.form.get('action')
+    data = request.get_json()
+
+    user = data.get("username")
+    pwd = data.get("password")
+    action = data.get("action")
+
     print("USER:", user)
     print("PWD:", pwd)
 
-    if user != ADMIN_USER or pwd != "123456":
-       return jsonify({"status": "error", "message": "Credenciales incorrectas"}), 403
+    if user != "admin" or pwd != "123456":
+        return jsonify({
+            "status": "error",
+            "message": "Credenciales incorrectas"
+        }), 403
 
     role = "admin"
-
-    # ===== LOGIN =====
-    if action == 'admin_login':
-        return jsonify({"status": "ok", "role": role})
 
     # ===== ESTADÍSTICAS =====
     if action == 'get_stats':
