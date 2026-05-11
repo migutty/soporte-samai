@@ -11,6 +11,7 @@ from email.mime.multipart import MIMEMultipart
 from flask import Flask, render_template, request, jsonify, send_file
 from dotenv import load_dotenv
 from flask import session
+from werkzeug.security import generate_password_hash, check_password_hash
 
 load_dotenv()
 
@@ -60,6 +61,7 @@ ADMIN_NOTIFICATION_EMAIL = os.getenv("ADMIN_NOTIFICATION_EMAIL", MAIL_USERNAME)
 # ===== CONFIG ADMIN =====
 ADMIN_USER = os.getenv("ADMIN_USER", "admin")
 ADMIN_PASS = os.getenv("ADMIN_PASS", "admin123")
+ADMIN_PASS_HASH = os.getenv("ADMIN_PASS_HASH")
 
 # ===== CONFIG WHATSAPP (CallMeBot) =====
 WHATSAPP_PHONE = os.getenv("WHATSAPP_PHONE", "")
@@ -795,8 +797,8 @@ def admin_panel():
     pwd = request.form.get('password')
     action = request.form.get('action')
 
-    if user != ADMIN_USER or pwd != ADMIN_PASS:
-        return jsonify({"status": "error", "message": "Credenciales incorrectas"}), 403
+   if user != ADMIN_USER or not check_password_hash(ADMIN_PASS_HASH, pwd):
+      return jsonify({"status": "error", "message": "Credenciales incorrectas"}), 403
 
     role = "admin"
 
