@@ -690,7 +690,7 @@ def soporte():
     cur = db_cursor(conn)
     cur.execute("""
         INSERT INTO tickets (
-            ticket id,nombre,correo,telefono,ciudad,despacho,
+            ticket_id,nombre,correo,telefono,ciudad,despacho,
             tipo_usuario,asunto,numero_proceso,descripcion,
             estado,fecha_creacion,tipo_solicitud,quien_radica,tipo_memorial,link_drive
         ) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)
