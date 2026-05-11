@@ -209,7 +209,7 @@ if (form && successMsg && errorMsg && errorText && submitBtn) {
 
       if (response.ok) {
         form.reset();
-        successMsg.style.display = 'block'; JPÑ
+        successMsg.style.display = 'block'; 
         successMsg.innerHTML = `
           <div class="success-icon">✅</div>
           <p class="success-title">Solicitud enviada correctamente</p>
