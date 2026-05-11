@@ -841,7 +841,7 @@ if (adminLoginForm && adminUsernameInput && adminPasswordInput && adminLoginMsg 
         password
       });
 
-      if (result.status === 'ok') {
+      if (data.status !== "success")  {
         adminSession = {
           username,
           password,
