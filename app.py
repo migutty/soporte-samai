@@ -214,8 +214,8 @@ def generate_ticket():
     conn = get_conn()
     cur = db_cursor(conn)
     cur.execute("""
-        SELECT ticket FROM tickets
-        WHERE ticket LIKE %s
+        SELECT ticket_id FROM tickets
+        WHERE ticket_id LIKE %s
         ORDER BY id DESC
         LIMIT 1
     """, (f"{prefix}%",))
@@ -225,7 +225,7 @@ def generate_ticket():
     if not row:
         count = 1
     else:
-        last_ticket = row["ticket"]
+        last_ticket = row["ticket_id"]
         try:
             count = int(last_ticket.split("-")[-1]) + 1
         except Exception:
