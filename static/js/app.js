@@ -739,18 +739,25 @@ function renderCharts(data) {
 }
 
 async function loadAdminDashboard() {
-  if (!adminSession.username || !adminSession.password) return;
+
+  console.log("LOAD DASHBOARD");
 
   try {
+
+    console.log("ANTES FETCH");
+
     const data = await adminPost({
       action: 'get_stats',
       username: adminSession.username,
       password: adminSession.password
     });
 
-    if (data.status !== 'ok') {
-      throw new Error(data.message || 'No autorizado');
-    }
+    console.log(data);
+
+  } catch (error) {
+    console.error("ERROR DASHBOARD:", error);
+  }
+}
 
     statTotal.textContent = data.total;
     statPendientes.textContent = data.pendientes;
