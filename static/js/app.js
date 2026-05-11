@@ -890,7 +890,7 @@ function actualizarEstadoSoporte() {
   const dia = ahora.getDay();
 
   const esLaboral = dia >= 1 && dia <= 5;
-  const enHorario = hora >= 8 && hora < 18;
+  const enHorario = hora >= 8 && hora < 17;
 
   if (esLaboral && enHorario) {
     btn.textContent = '🟢 Atención en línea ahora';
