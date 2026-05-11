@@ -397,7 +397,7 @@ if (ticketForm && ticketInput && ticketResult && ticketError) {
       const response = await fetch('/api/tickets');
       const allTickets = await response.json();
 
-      const data = allTickets.find(t => t.ticket === ticket);
+      const data = allTickets.find(t => (t.ticket || t.ticket_id) === ticket);
 
       if (data) {
         let estadoTexto = '';
@@ -413,7 +413,7 @@ if (ticketForm && ticketInput && ticketResult && ticketError) {
           <div class="form-success" style="display:block;">
             <p class="success-title">Ticket encontrado</p>
             <p class="success-msg">
-              <strong>Ticket:</strong> ${data.ticket}<br>
+              <strong>Ticket:</strong> ${data.ticket || data.ticket_id}<br>
               <strong>Nombre:</strong> ${data.nombre}<br>
               <strong>Asunto:</strong> ${data.asunto}<br>
               <strong>Ciudad:</strong> ${data.ciudad || ''}<br>
@@ -469,7 +469,13 @@ async function adminPost(payloadObj) {
     body: payload
   });
 
-  return response.json();
+  const text = await response.text();
+  try {
+    return JSON.parse(text);
+  } catch (error) {
+    console.error('Respuesta no JSON de /api/admin:', text);
+    throw error;
+  }
 }
 
 function bindAdminButtons() {
@@ -501,6 +507,10 @@ function bindAdminButtons() {
   });
 }
 
+function getTicketCode(item) {
+  return item.ticket || item.ticket_id || '';
+}
+
 function renderAdminTable(data) {
   adminTicketsBody.innerHTML = '';
 
@@ -522,7 +532,7 @@ function renderAdminTable(data) {
     if (esMemorial) tr.style.borderLeft = '3px solid rgba(59,130,246,0.4)';
 
     tr.innerHTML = `
-      <td><span style="font-weight:700;color:#E2E8F0;font-size:13px;letter-spacing:0.5px;">${item.ticket}</span></td>
+      <td><span style="font-weight:700;color:#E2E8F0;font-size:13px;letter-spacing:0.5px;">${getTicketCode(item)}</span></td>
       <td>${tipoBadge}</td>
       <td>
         <div style="line-height:1.4;">
@@ -535,14 +545,14 @@ function renderAdminTable(data) {
       <td>
         <div style="display:flex;flex-direction:column;gap:4px;min-width:120px;">
           ${canEdit ? `
-            <select class="admin-estado-select" data-ticket="${item.ticket}" style="font-size:12px;padding:6px 8px;">
+            <select class="admin-estado-select" data-ticket="${getTicketCode(item)}" style="font-size:12px;padding:6px 8px;">
               <option value="Pendiente" ${item.estado === 'Pendiente' ? 'selected' : ''}>Pendiente</option>
               <option value="En proceso" ${item.estado === 'En proceso' ? 'selected' : ''}>En proceso</option>
               <option value="Resuelto" ${item.estado === 'Resuelto' ? 'selected' : ''}>Resuelto</option>
             </select>
             <div style="display:flex;gap:4px;">
-              <button class="admin-save-btn" data-ticket="${item.ticket}" style="font-size:11px;padding:5px 10px;flex:1;">Guardar</button>
-              <button class="admin-historial-btn" data-ticket="${item.ticket}" style="font-size:11px;background:#334155;color:#CBD5E1;border:1px solid #475569;border-radius:6px;padding:5px 10px;cursor:pointer;flex:1;">📋</button>
+              <button class="admin-save-btn" data-ticket="${getTicketCode(item)}" style="font-size:11px;padding:5px 10px;flex:1;">Guardar</button>
+              <button class="admin-historial-btn" data-ticket="${getTicketCode(item)}" style="font-size:11px;background:#334155;color:#CBD5E1;border:1px solid #475569;border-radius:6px;padding:5px 10px;cursor:pointer;flex:1;">📋</button>
             </div>
             ${item.link_drive ? `<a href="${item.link_drive}" target="_blank" rel="noopener" style="font-size:11px;color:#60A5FA;text-decoration:none;text-align:center;">📎 Ver documento</a>` : ''}
           ` : '<span class="estado-badge estado-proceso" style="font-size:11px;">Solo consulta</span>'}
@@ -626,7 +636,7 @@ function filterAdminTable() {
 
   const filtered = adminTicketsData.filter(item => {
     const fullText = [
-      item.ticket,
+      getTicketCode(item),
       item.nombre,
       item.asunto,
       item.numero_proceso,
@@ -738,49 +748,53 @@ function renderCharts(data) {
   }
 }
 async function loadAdminDashboard() {
+  if (!adminSession.username || !adminSession.password) return;
 
   try {
     const data = await adminPost({
       action: 'get_stats',
-      username: 'admin',
-      password: '123456'
+      username: adminSession.username,
+      password: adminSession.password
     });
 
     if (data.status !== 'ok') {
       throw new Error(data.message || 'No autorizado');
     }
 
-    console.log(data);
-
-  } catch (error) {
-    console.error(error);
-  }
-}
-
-    statTotal.textContent = data.total;
-    statPendientes.textContent = data.pendientes;
-    statProceso.textContent = data.enProceso;
-    statResueltos.textContent = data.resueltos;
-    statResolucion.textContent = `${data.porcentajeResolucion || 0}%`;
+    if (statTotal) statTotal.textContent = data.total;
+    if (statPendientes) statPendientes.textContent = data.pendientes;
+    if (statProceso) statProceso.textContent = data.enProceso;
+    if (statResueltos) statResueltos.textContent = data.resueltos;
+    if (statResolucion) statResolucion.textContent = `${data.porcentajeResolucion || 0}%`;
 
     renderStatList(adminCityStats, data.porCiudad);
     renderStatList(adminUsertypeStats, data.porTipoUsuario);
 
-    adminRoleBadge.textContent = data.role === 'admin' ? 'Administrador' : 'Consulta';
-    adminRoleBadge.className = data.role === 'admin'
-      ? 'estado-badge estado-resuelto'
-      : 'estado-badge estado-proceso';
+    if (adminRoleBadge) {
+      adminRoleBadge.textContent = data.role === 'admin' ? 'Administrador' : 'Consulta';
+      adminRoleBadge.className = data.role === 'admin'
+        ? 'estado-badge estado-resuelto'
+        : 'estado-badge estado-proceso';
+    }
 
-    adminTicketsData = data.tickets || [];
-    adminSession.role = data.role;
+    adminTicketsData = (data.tickets || []).map(t => ({
+      ...t,
+      ticket: t.ticket || t.ticket_id,
+      radicado: t.radicado || t.numero_proceso || ''
+    }));
+
+    adminSession.role = data.role || 'admin';
     filterAdminTable();
 
-    // ===== GRÁFICOS =====
-    renderCharts(data);
+    if (typeof renderCharts === 'function') {
+      renderCharts(data);
+    }
   } catch (error) {
     console.error(error);
-    adminLoginMsg.textContent = 'Error cargando dashboard.';
-    adminLoginMsg.style.display = 'flex';
+    if (adminLoginMsg) {
+      adminLoginMsg.textContent = 'Error cargando dashboard.';
+      adminLoginMsg.style.display = 'flex';
+    }
   }
 }
 
@@ -846,16 +860,16 @@ if (adminLoginForm && adminUsernameInput && adminPasswordInput && adminLoginMsg 
         password
       });
 
-      if (data.status !== "success") { {
+      if (result.status === 'ok') {
         adminSession = {
           username,
           password,
-          role: result.role
+          role: result.role || 'admin'
         };
         adminDashboard.style.display = 'block';
-        //loadAdminDashboard();
+        await loadAdminDashboard();
       } else {
-        adminLoginMsg.textContent = 'Credenciales incorrectas.';
+        adminLoginMsg.textContent = result.message || 'Credenciales incorrectas.';
         adminLoginMsg.style.display = 'flex';
       }
     } catch (error) {

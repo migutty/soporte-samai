@@ -1,7 +1,5 @@
 'use strict';
 
-const WEBHOOK_URL = 'https://script.google.com/macros/s/AKfycbyZElC3cHXufHaeBKHnsKCYXhgr1jG7weHsQOksJSxtJYb28vfd1FLrHS93hXKQIytE/exec';
-
 let adminSession = {
   username: '',
   password: '',
@@ -9,6 +7,58 @@ let adminSession = {
 };
 
 let adminTicketsData = [];
+
+// ===== MAPA CIUDAD → JUZGADOS =====
+const CITY_COURTS = {
+  'Tunja': [
+    'JUZGADO 01 ADMINISTRATIVO ORAL DE TUNJA',
+    'JUZGADO 02 ADMINISTRATIVO ORAL DE TUNJA',
+    'JUZGADO 03 ADMINISTRATIVO ORAL DE TUNJA',
+    'JUZGADO 04 ADMINISTRATIVO ORAL DE TUNJA',
+    'JUZGADO 05 ADMINISTRATIVO ORAL DE TUNJA',
+    'JUZGADO 06 ADMINISTRATIVO ORAL DE TUNJA',
+    'JUZGADO 07 ADMINISTRATIVO ORAL DE TUNJA',
+    'JUZGADO 08 ADMINISTRATIVO ORAL DE TUNJA',
+    'JUZGADO 09 ADMINISTRATIVO ORAL DE TUNJA',
+    'JUZGADO 10 ADMINISTRATIVO ORAL DE TUNJA',
+    'JUZGADO 11 ADMINISTRATIVO ORAL DE TUNJA',
+    'JUZGADO 12 ADMINISTRATIVO ORAL DE TUNJA',
+    'JUZGADO 13 ADMINISTRATIVO ORAL DE TUNJA',
+    'JUZGADO 14 ADMINISTRATIVO ORAL DE TUNJA'
+  ],
+  'Duitama': [
+    'JUZGADO 01 ADMINISTRATIVO ORAL DE DUITAMA',
+    'JUZGADO 02 ADMINISTRATIVO ORAL DE DUITAMA',
+    'JUZGADO 03 ADMINISTRATIVO ORAL DE DUITAMA'
+  ],
+  'Sogamoso': [
+    'JUZGADO 01 ADMINISTRATIVO ORAL DE SOGAMOSO',
+    'JUZGADO 02 ADMINISTRATIVO ORAL DE SOGAMOSO'
+  ],
+  'Otra': ['OTRO DESPACHO']
+};
+
+const COURT_PREFIX = {
+  'JUZGADO 01 ADMINISTRATIVO ORAL DE TUNJA': '150013333001',
+  'JUZGADO 02 ADMINISTRATIVO ORAL DE TUNJA': '150013333002',
+  'JUZGADO 03 ADMINISTRATIVO ORAL DE TUNJA': '150013333003',
+  'JUZGADO 04 ADMINISTRATIVO ORAL DE TUNJA': '150013333004',
+  'JUZGADO 05 ADMINISTRATIVO ORAL DE TUNJA': '150013333005',
+  'JUZGADO 06 ADMINISTRATIVO ORAL DE TUNJA': '150013333006',
+  'JUZGADO 07 ADMINISTRATIVO ORAL DE TUNJA': '150013333007',
+  'JUZGADO 08 ADMINISTRATIVO ORAL DE TUNJA': '150013333008',
+  'JUZGADO 09 ADMINISTRATIVO ORAL DE TUNJA': '150013333009',
+  'JUZGADO 10 ADMINISTRATIVO ORAL DE TUNJA': '150013333010',
+  'JUZGADO 11 ADMINISTRATIVO ORAL DE TUNJA': '150013333011',
+  'JUZGADO 12 ADMINISTRATIVO ORAL DE TUNJA': '150013333012',
+  'JUZGADO 13 ADMINISTRATIVO ORAL DE TUNJA': '150013333013',
+  'JUZGADO 14 ADMINISTRATIVO ORAL DE TUNJA': '150013333014',
+  'JUZGADO 01 ADMINISTRATIVO ORAL DE DUITAMA': '152383333001',
+  'JUZGADO 02 ADMINISTRATIVO ORAL DE DUITAMA': '152383333002',
+  'JUZGADO 03 ADMINISTRATIVO ORAL DE DUITAMA': '152383333003',
+  'JUZGADO 01 ADMINISTRATIVO ORAL DE SOGAMOSO': '157593333001',
+  'JUZGADO 02 ADMINISTRATIVO ORAL DE SOGAMOSO': '157593333002'
+};
 
 // ===== NAVBAR =====
 const navbar = document.getElementById('navbar');
@@ -46,7 +96,7 @@ const navLinksMenu = document.getElementById('nav-links');
 if (hamburger && navLinksMenu && navbar) {
   hamburger.addEventListener('click', () => {
     const isOpen = navLinksMenu.classList.toggle('open');
-    hamburger.setAttribute('aria-expanded', isOpen);
+    hamburger.setAttribute('aria-expanded', String(isOpen));
 
     const spans = hamburger.querySelectorAll('span');
     if (isOpen) {
@@ -119,7 +169,8 @@ function initRevealElements() {
     '.trust-card',
     '.faq-item',
     '.admin-card',
-    '.help-ultra-card'
+    '.help-ultra-card',
+    '.info-util-card'
   ];
 
   selectors.forEach(selector => {
@@ -150,9 +201,68 @@ const errorText = document.getElementById('form-error-msg');
 const submitBtn = document.getElementById('form-submit-btn');
 
 if (form && successMsg && errorMsg && errorText && submitBtn) {
-  form.addEventListener('submit', async (e) => {
-    console.log('submit soporte disparado');
+  const ciudadField = form.ciudad;
+  const despachoField = form.despacho;
+  const radicadoField = form.radicado;
 
+  function fillDespachosByCity(city) {
+    if (!despachoField) return;
+
+    despachoField.innerHTML = '';
+    const defaultOpt = document.createElement('option');
+    defaultOpt.value = '';
+    defaultOpt.textContent = 'Seleccione despacho';
+    defaultOpt.disabled = true;
+    defaultOpt.selected = true;
+    despachoField.appendChild(defaultOpt);
+
+    (CITY_COURTS[city] || []).forEach(item => {
+      const opt = document.createElement('option');
+      opt.value = item;
+      opt.textContent = item;
+      despachoField.appendChild(opt);
+    });
+  }
+
+  function fillProcessPrefix() {
+    if (!despachoField || !radicadoField) return;
+    const selected = despachoField.value;
+    if (COURT_PREFIX[selected]) {
+      radicadoField.value = COURT_PREFIX[selected];
+    } else if ((ciudadField?.value || '') === 'Otra') {
+      radicadoField.value = '';
+    }
+  }
+
+  if (ciudadField && despachoField) {
+    ciudadField.addEventListener('change', () => {
+      fillDespachosByCity(ciudadField.value);
+      if (radicadoField) radicadoField.value = '';
+    });
+
+    despachoField.addEventListener('change', () => {
+      fillProcessPrefix();
+    });
+  }
+
+  // ===== TOGGLE MEMORIAL FIELDS =====
+  const tipoSolicitudField = document.getElementById('tipo_solicitud');
+  const memorialFields = document.getElementById('memorial-fields');
+  const memorialWarning = document.getElementById('memorial-warning');
+
+  function toggleMemorialFields() {
+    const esMemorial = tipoSolicitudField && tipoSolicitudField.value === 'Envío de memorial';
+    if (memorialFields) memorialFields.style.display = esMemorial ? 'block' : 'none';
+    if (memorialWarning) memorialWarning.style.display = esMemorial ? 'block' : 'none';
+  }
+
+  if (tipoSolicitudField) {
+    tipoSolicitudField.addEventListener('change', toggleMemorialFields);
+    toggleMemorialFields();
+  }
+
+
+  form.addEventListener('submit', async (e) => {
     e.preventDefault();
 
     successMsg.style.display = 'none';
@@ -175,13 +285,28 @@ if (form && successMsg && errorMsg && errorText && submitBtn) {
       !formData.correo ||
       !formData.telefono ||
       !formData.ciudad ||
+      !formData.despacho ||
       !formData.tipo_usuario ||
       !formData.asunto ||
       !formData.descripcion
     ) {
       errorText.textContent = 'Por favor completa todos los campos obligatorios.';
       errorMsg.style.display = 'flex';
+      errorMsg.scrollIntoView({ behavior: 'smooth', block: 'center' });
       return;
+    }
+
+    // ===== VALIDACIÓN LINK MEMORIAL =====
+    const tipoSol = form.tipo_solicitud ? form.tipo_solicitud.value : 'Solicitud general';
+    const linkDrive = form.link_drive ? form.link_drive.value.trim() : '';
+
+    if (tipoSol === 'Envío de memorial') {
+      if (!linkDrive || (!linkDrive.startsWith('https://') && !linkDrive.startsWith('http://'))) {
+        errorText.textContent = 'Debe ingresar un enlace válido de Google Drive u otro servicio (debe comenzar con https:// o http://).';
+        errorMsg.style.display = 'flex';
+        errorMsg.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        return;
+      }
     }
 
     submitBtn.disabled = true;
@@ -193,10 +318,15 @@ if (form && successMsg && errorMsg && errorText && submitBtn) {
         correo: formData.correo,
         telefono: formData.telefono,
         ciudad: formData.ciudad,
+        despacho: formData.despacho,
         tipo_usuario: formData.tipo_usuario,
         asunto: formData.asunto,
         numero_proceso: formData.radicado,
-        descripcion: formData.descripcion
+        descripcion: formData.descripcion,
+        tipo_solicitud: form.tipo_solicitud ? form.tipo_solicitud.value : 'Solicitud general',
+        quien_radica: form.quien_radica ? form.quien_radica.value.trim() : '',
+        tipo_memorial: form.tipo_memorial ? form.tipo_memorial.value : '',
+        link_drive: form.link_drive ? form.link_drive.value.trim() : ''
       };
 
       const response = await fetch('/api/soporte', {
@@ -207,20 +337,32 @@ if (form && successMsg && errorMsg && errorText && submitBtn) {
         body: JSON.stringify(payload)
       });
 
-      if (response.ok) {
+      const result = await response.json();
+
+      if (response.ok && result.status === 'ok') {
         form.reset();
-        successMsg.style.display = 'block'; 
+        successMsg.style.display = 'block';
         successMsg.innerHTML = `
           <div class="success-icon">✅</div>
-          <p class="success-title">Solicitud enviada correctamente</p>
+          <p class="success-title">Su solicitud fue enviada correctamente</p>
+          <p class="success-msg">
+            Número de ticket: <strong>${result.ticket}</strong><br>
+            Pronto recibirá atención por parte del equipo de soporte.
+          </p>
         `;
+        if (despachoField) {
+          despachoField.innerHTML = `<option value="" disabled selected>Seleccione despacho</option>`;
+        }
+        toggleMemorialFields();
+        successMsg.scrollIntoView({ behavior: 'smooth', block: 'center' });
       } else {
-        throw new Error('No fue posible enviar la solicitud. Intente nuevamente.');
+        throw new Error(result.message || 'No fue posible enviar la solicitud.');
       }
     } catch (err) {
       console.error(err);
       errorText.textContent = 'No fue posible enviar la solicitud. Intente nuevamente.';
       errorMsg.style.display = 'flex';
+      errorMsg.scrollIntoView({ behavior: 'smooth', block: 'center' });
     } finally {
       submitBtn.disabled = false;
       submitBtn.innerHTML = 'Enviar solicitud de soporte';
@@ -252,27 +394,40 @@ if (ticketForm && ticketInput && ticketResult && ticketError) {
     }
 
     try {
-      const response = await fetch(`${WEBHOOK_URL}?ticket=${encodeURIComponent(ticket)}`);
-      const data = await response.json();
+      const response = await fetch('/api/tickets');
+      const allTickets = await response.json();
 
-      if (data.status === 'ok') {
+      const data = allTickets.find(t => (t.ticket || t.ticket_id) === ticket);
+
+      if (data) {
+        let estadoTexto = '';
+        if (data.estado === 'Pendiente') {
+          estadoTexto = 'Su solicitud fue recibida y se encuentra pendiente de revisión.';
+        } else if (data.estado === 'En proceso') {
+          estadoTexto = 'Su solicitud ya fue revisada y se encuentra en proceso.';
+        } else if (data.estado === 'Resuelto') {
+          estadoTexto = 'Su solicitud ya fue atendida.';
+        }
+
         ticketResult.innerHTML = `
           <div class="form-success" style="display:block;">
             <p class="success-title">Ticket encontrado</p>
             <p class="success-msg">
-              <strong>Ticket:</strong> ${data.ticket}<br>
+              <strong>Ticket:</strong> ${data.ticket || data.ticket_id}<br>
               <strong>Nombre:</strong> ${data.nombre}<br>
               <strong>Asunto:</strong> ${data.asunto}<br>
-              <strong>Estado:</strong> ${estadoBadge(data.estado)}
+              <strong>Ciudad:</strong> ${data.ciudad || ''}<br>
+              <strong>Despacho:</strong> ${data.despacho || ''}<br>
+              <strong>Número de proceso:</strong> ${data.numero_proceso || ''}<br>
+              <strong>Fecha:</strong> ${data.fecha_creacion || ''}<br>
+              <strong>Estado:</strong> ${estadoBadge(data.estado)}<br><br>
+              ${estadoTexto}
             </p>
           </div>
         `;
         ticketResult.style.display = 'block';
-      } else if (data.status === 'not_found') {
-        ticketError.textContent = 'No se encontró el ticket ingresado.';
-        ticketError.style.display = 'flex';
       } else {
-        ticketError.textContent = 'No fue posible consultar el ticket.';
+        ticketError.textContent = 'No se encontró el ticket ingresado.';
         ticketError.style.display = 'flex';
       }
     } catch (error) {
@@ -283,7 +438,7 @@ if (ticketForm && ticketInput && ticketResult && ticketError) {
   });
 }
 
-// ===== PANEL ADMIN EMPRESA =====
+// ===== PANEL ADMIN =====
 const adminLoginForm = document.getElementById('admin-login-form');
 const adminUsernameInput = document.getElementById('admin-username');
 const adminPasswordInput = document.getElementById('admin-password');
@@ -309,12 +464,51 @@ async function adminPost(payloadObj) {
   const payload = new URLSearchParams();
   Object.keys(payloadObj).forEach(key => payload.append(key, payloadObj[key]));
 
-  const response = await fetch(WEBHOOK_URL, {
+  const response = await fetch('/api/admin', {
     method: 'POST',
     body: payload
   });
 
-  return response.json();
+  const text = await response.text();
+  try {
+    return JSON.parse(text);
+  } catch (error) {
+    console.error('Respuesta no JSON de /api/admin:', text);
+    throw error;
+  }
+}
+
+function bindAdminButtons() {
+  document.querySelectorAll('.admin-save-btn').forEach(button => {
+    button.addEventListener('click', async () => {
+      const ticket = button.dataset.ticket;
+      const select = document.querySelector(`.admin-estado-select[data-ticket="${ticket}"]`);
+      if (!select) return;
+
+      try {
+        const result = await adminPost({
+          action: 'update_ticket',
+          username: adminSession.username,
+          password: adminSession.password,
+          ticket,
+          estado: select.value
+        });
+
+        if (result.status === 'ok') {
+          loadAdminDashboard();
+        } else {
+          alert(result.message || 'No fue posible actualizar el ticket.');
+        }
+      } catch (error) {
+        console.error(error);
+        alert('Error actualizando el ticket.');
+      }
+    });
+  });
+}
+
+function getTicketCode(item) {
+  return item.ticket || item.ticket_id || '';
 }
 
 function renderAdminTable(data) {
@@ -322,33 +516,118 @@ function renderAdminTable(data) {
 
   data.forEach(item => {
     const canEdit = adminSession.role === 'admin';
+    const tipoSol = item.tipo_solicitud || 'Solicitud general';
+    const esMemorial = tipoSol === 'Envío de memorial';
 
+    const tipoBadge = esMemorial
+      ? '<span class="estado-badge estado-proceso" style="font-size:11px;gap:4px;">📂 Memorial</span>'
+      : '<span class="estado-badge" style="font-size:11px;background:rgba(148,163,184,0.12);color:#94A3B8;border:1px solid rgba(148,163,184,0.2);">📋 Solicitud</span>';
+
+    const tiempoColor = item.estado === 'Resuelto' ? '#4ADE80' : (item.estado === 'En proceso' ? '#60A5FA' : '#FBBF24');
+
+    // Fila principal
     const tr = document.createElement('tr');
+    tr.style.cursor = 'pointer';
+    tr.style.transition = 'background 0.2s ease';
+    if (esMemorial) tr.style.borderLeft = '3px solid rgba(59,130,246,0.4)';
+
     tr.innerHTML = `
-      <td>${item.ticket}</td>
-      <td>${item.nombre}</td>
-      <td>${item.ciudad || ''}</td>
-      <td>${item.radicado || ''}</td>
-      <td>${item.asunto}</td>
-      <td>${estadoBadge(item.estado)}</td>
+      <td><span style="font-weight:700;color:#E2E8F0;font-size:13px;letter-spacing:0.5px;">${getTicketCode(item)}</span></td>
+      <td>${tipoBadge}</td>
       <td>
-        ${canEdit
-        ? `
-          <select class="admin-estado-select" data-ticket="${item.ticket}">
-            <option value="Pendiente" ${item.estado === 'Pendiente' ? 'selected' : ''}>Pendiente</option>
-            <option value="En proceso" ${item.estado === 'En proceso' ? 'selected' : ''}>En proceso</option>
-            <option value="Resuelto" ${item.estado === 'Resuelto' ? 'selected' : ''}>Resuelto</option>
-          </select>
-          <button class="admin-save-btn" data-ticket="${item.ticket}">Guardar</button>
-        `
-        : `<span class="estado-badge estado-proceso">Solo consulta</span>`
-      }
+        <div style="line-height:1.4;">
+          <span style="font-weight:600;color:#E2E8F0;">${item.nombre}</span>
+          <span style="display:block;font-size:11px;color:#64748B;">${item.ciudad || ''} · ${item.asunto || ''}</span>
+        </div>
+      </td>
+      <td>${estadoBadge(item.estado)}</td>
+      <td><span style="font-size:12px;font-weight:700;color:${tiempoColor};">${item.tiempo_atencion || '—'}</span></td>
+      <td>
+        <div style="display:flex;flex-direction:column;gap:4px;min-width:120px;">
+          ${canEdit ? `
+            <select class="admin-estado-select" data-ticket="${getTicketCode(item)}" style="font-size:12px;padding:6px 8px;">
+              <option value="Pendiente" ${item.estado === 'Pendiente' ? 'selected' : ''}>Pendiente</option>
+              <option value="En proceso" ${item.estado === 'En proceso' ? 'selected' : ''}>En proceso</option>
+              <option value="Resuelto" ${item.estado === 'Resuelto' ? 'selected' : ''}>Resuelto</option>
+            </select>
+            <div style="display:flex;gap:4px;">
+              <button class="admin-save-btn" data-ticket="${getTicketCode(item)}" style="font-size:11px;padding:5px 10px;flex:1;">Guardar</button>
+              <button class="admin-historial-btn" data-ticket="${getTicketCode(item)}" style="font-size:11px;background:#334155;color:#CBD5E1;border:1px solid #475569;border-radius:6px;padding:5px 10px;cursor:pointer;flex:1;">📋</button>
+            </div>
+            ${item.link_drive ? `<a href="${item.link_drive}" target="_blank" rel="noopener" style="font-size:11px;color:#60A5FA;text-decoration:none;text-align:center;">📎 Ver documento</a>` : ''}
+          ` : '<span class="estado-badge estado-proceso" style="font-size:11px;">Solo consulta</span>'}
+        </div>
       </td>
     `;
+
+    // Fila de detalle expandible
+    const detailTr = document.createElement('tr');
+    detailTr.style.display = 'none';
+    detailTr.innerHTML = `
+      <td colspan="6" style="padding:0;">
+        <div style="background:rgba(15,23,42,0.6);border:1px solid rgba(255,255,255,0.06);border-radius:10px;margin:4px 12px 12px;padding:16px 20px;display:grid;grid-template-columns:1fr 1fr;gap:8px 24px;font-size:13px;">
+          <div><span style="color:#64748B;">📌 Asunto:</span> <span style="color:#CBD5E1;">${item.asunto || '—'}</span></div>
+          <div><span style="color:#64748B;">🏛️ Ciudad:</span> <span style="color:#CBD5E1;">${item.ciudad || '—'}</span></div>
+          <div><span style="color:#64748B;">🏢 Despacho:</span> <span style="color:#CBD5E1;">${item.despacho || '—'}</span></div>
+          <div><span style="color:#64748B;">📧 Correo:</span> <span style="color:#CBD5E1;">${item.correo || '—'}</span></div>
+          <div><span style="color:#64748B;">📞 Teléfono:</span> <span style="color:#CBD5E1;">${item.telefono || '—'}</span></div>
+          <div><span style="color:#64748B;">📁 Proceso:</span> <span style="color:#CBD5E1;">${item.numero_proceso || '—'}</span></div>
+          ${esMemorial ? `
+            <div><span style="color:#64748B;">🧑‍⚖️ Radica:</span> <span style="color:#CBD5E1;">${item.quien_radica || '—'}</span></div>
+            <div><span style="color:#64748B;">📄 Tipo memorial:</span> <span style="color:#CBD5E1;">${item.tipo_memorial || '—'}</span></div>
+          ` : ''}
+          <div style="grid-column:1/-1;"><span style="color:#64748B;">📝 Descripción:</span> <span style="color:#CBD5E1;">${item.descripcion || '—'}</span></div>
+          <div><span style="color:#64748B;">📅 Fecha:</span> <span style="color:#CBD5E1;">${item.fecha_creacion || '—'}</span></div>
+        </div>
+      </td>
+    `;
+
+    // Toggle expand on click
+    tr.addEventListener('click', (e) => {
+      if (e.target.closest('select, button, a')) return;
+      detailTr.style.display = detailTr.style.display === 'none' ? 'table-row' : 'none';
+      tr.style.background = detailTr.style.display === 'none' ? '' : 'rgba(59,130,246,0.04)';
+    });
+
     adminTicketsBody.appendChild(tr);
+    adminTicketsBody.appendChild(detailTr);
   });
 
   bindAdminButtons();
+  bindHistorialButtons();
+}
+
+// ===== HISTORIAL DE ESTADOS =====
+function bindHistorialButtons() {
+  document.querySelectorAll('.admin-historial-btn').forEach(btn => {
+    btn.addEventListener('click', () => verHistorial(btn.dataset.ticket));
+  });
+}
+
+async function verHistorial(ticketId) {
+  try {
+    const resp = await fetch(`/api/historial/${ticketId}`);
+    const data = await resp.json();
+
+    if (!data.length) {
+      alert(`Ticket ${ticketId}\n\nSin historial registrado.`);
+      return;
+    }
+
+    let texto = `📋 HISTORIAL — ${ticketId}\n${'━'.repeat(32)}\n\n`;
+    data.forEach((h, i) => {
+      const icono = h.estado === 'Creado' ? '🟢'
+        : h.estado === 'En proceso' ? '🔵'
+        : h.estado === 'Resuelto' ? '✅'
+        : '⏳';
+      texto += `${icono}  ${h.estado}\n     ${h.fecha}\n\n`;
+    });
+
+    alert(texto);
+  } catch (err) {
+    console.error(err);
+    alert('Error consultando historial.');
+  }
 }
 
 function filterAdminTable() {
@@ -357,11 +636,12 @@ function filterAdminTable() {
 
   const filtered = adminTicketsData.filter(item => {
     const fullText = [
-      item.ticket,
+      getTicketCode(item),
       item.nombre,
       item.asunto,
-      item.radicado,
-      item.ciudad
+      item.numero_proceso,
+      item.ciudad,
+      item.despacho
     ].join(' ').toLowerCase();
 
     const matchSearch = fullText.includes(search);
@@ -372,6 +652,7 @@ function filterAdminTable() {
 
   renderAdminTable(filtered);
 }
+
 function renderStatList(container, dataObj) {
   if (!container) return;
 
@@ -391,6 +672,81 @@ function renderStatList(container, dataObj) {
     `)
     .join('');
 }
+
+// ===== CHARTS =====
+let chartEstado = null;
+let chartCiudad = null;
+
+function renderCharts(data) {
+  // --- Doughnut: Estado ---
+  const ctxEstado = document.getElementById('chart-estado');
+  if (ctxEstado) {
+    if (chartEstado) chartEstado.destroy();
+    chartEstado = new Chart(ctxEstado, {
+      type: 'doughnut',
+      data: {
+        labels: ['Pendientes', 'En proceso', 'Resueltos'],
+        datasets: [{
+          data: [data.pendientes, data.enProceso, data.resueltos],
+          backgroundColor: ['#F59E0B', '#3B82F6', '#22C55E'],
+          borderColor: ['#D97706', '#2563EB', '#16A34A'],
+          borderWidth: 2,
+          hoverOffset: 8
+        }]
+      },
+      options: {
+        responsive: true,
+        cutout: '60%',
+        plugins: {
+          legend: {
+            position: 'bottom',
+            labels: { color: '#CBD5E1', font: { size: 12 }, padding: 16 }
+          }
+        }
+      }
+    });
+  }
+
+  // --- Bar: Ciudad ---
+  const ctxCiudad = document.getElementById('chart-ciudad');
+  if (ctxCiudad && data.porCiudad) {
+    const ciudades = Object.keys(data.porCiudad);
+    const valores = Object.values(data.porCiudad);
+
+    if (chartCiudad) chartCiudad.destroy();
+    chartCiudad = new Chart(ctxCiudad, {
+      type: 'bar',
+      data: {
+        labels: ciudades,
+        datasets: [{
+          label: 'Tickets',
+          data: valores,
+          backgroundColor: 'rgba(59,130,246,0.6)',
+          borderColor: '#3B82F6',
+          borderWidth: 1,
+          borderRadius: 6
+        }]
+      },
+      options: {
+        responsive: true,
+        scales: {
+          y: {
+            beginAtZero: true,
+            ticks: { color: '#94A3B8', stepSize: 1 },
+            grid: { color: 'rgba(148,163,184,0.1)' }
+          },
+          x: {
+            ticks: { color: '#CBD5E1', font: { size: 11 } },
+            grid: { display: false }
+          }
+        },
+        plugins: {
+          legend: { display: false }
+        }
+      }
+    });
+  }
+}
 async function loadAdminDashboard() {
   if (!adminSession.username || !adminSession.password) return;
 
@@ -405,27 +761,40 @@ async function loadAdminDashboard() {
       throw new Error(data.message || 'No autorizado');
     }
 
-    statTotal.textContent = data.total;
-    statPendientes.textContent = data.pendientes;
-    statProceso.textContent = data.enProceso;
-    statResueltos.textContent = data.resueltos;
-    statResolucion.textContent = `${data.porcentajeResolucion || 0}%`;
+    if (statTotal) statTotal.textContent = data.total;
+    if (statPendientes) statPendientes.textContent = data.pendientes;
+    if (statProceso) statProceso.textContent = data.enProceso;
+    if (statResueltos) statResueltos.textContent = data.resueltos;
+    if (statResolucion) statResolucion.textContent = `${data.porcentajeResolucion || 0}%`;
 
     renderStatList(adminCityStats, data.porCiudad);
     renderStatList(adminUsertypeStats, data.porTipoUsuario);
 
-    adminRoleBadge.textContent = data.role === 'admin' ? 'Administrador' : 'Consulta';
-    adminRoleBadge.className = data.role === 'admin'
-      ? 'estado-badge estado-resuelto'
-      : 'estado-badge estado-proceso';
+    if (adminRoleBadge) {
+      adminRoleBadge.textContent = data.role === 'admin' ? 'Administrador' : 'Consulta';
+      adminRoleBadge.className = data.role === 'admin'
+        ? 'estado-badge estado-resuelto'
+        : 'estado-badge estado-proceso';
+    }
 
-    adminTicketsData = data.tickets || [];
-    adminSession.role = data.role;
+    adminTicketsData = (data.tickets || []).map(t => ({
+      ...t,
+      ticket: t.ticket || t.ticket_id,
+      radicado: t.radicado || t.numero_proceso || ''
+    }));
+
+    adminSession.role = data.role || 'admin';
     filterAdminTable();
+
+    if (typeof renderCharts === 'function') {
+      renderCharts(data);
+    }
   } catch (error) {
     console.error(error);
-    adminLoginMsg.textContent = 'Error cargando dashboard.';
-    adminLoginMsg.style.display = 'flex';
+    if (adminLoginMsg) {
+      adminLoginMsg.textContent = 'Error cargando dashboard.';
+      adminLoginMsg.style.display = 'flex';
+    }
   }
 }
 
@@ -456,9 +825,11 @@ function logoutAdmin() {
 }
 
 function closeAdminPanelOnly() {
-  adminDashboard.style.display = 'none';
-  adminLoginMsg.style.display = 'none';
-  adminLoginMsg.textContent = '';
+  if (adminDashboard) adminDashboard.style.display = 'none';
+  if (adminLoginMsg) {
+    adminLoginMsg.style.display = 'none';
+    adminLoginMsg.textContent = '';
+  }
 }
 
 if (adminSearch) adminSearch.addEventListener('input', filterAdminTable);
@@ -493,12 +864,12 @@ if (adminLoginForm && adminUsernameInput && adminPasswordInput && adminLoginMsg 
         adminSession = {
           username,
           password,
-          role: result.role
+          role: result.role || 'admin'
         };
         adminDashboard.style.display = 'block';
-        loadAdminDashboard();
+        await loadAdminDashboard();
       } else {
-        adminLoginMsg.textContent = 'Credenciales incorrectas.';
+        adminLoginMsg.textContent = result.message || 'Credenciales incorrectas.';
         adminLoginMsg.style.display = 'flex';
       }
     } catch (error) {
@@ -540,6 +911,77 @@ function actualizarEstadoSoporte() {
 actualizarEstadoSoporte();
 
 console.log('SAMAI Empresa cargado correctamente');
+
+// ===== EXTENSIONES DINÁMICAS =====
+let extensionesData = [];
+
+async function cargarExtensiones() {
+  const select = document.getElementById('ext-despacho-select');
+  if (!select) return;
+
+  try {
+    const resp = await fetch('/api/extensiones');
+    extensionesData = await resp.json();
+
+    extensionesData.forEach(item => {
+      const opt = document.createElement('option');
+      opt.value = item.despacho;
+      opt.textContent = item.despacho;
+      select.appendChild(opt);
+    });
+
+    select.addEventListener('change', () => {
+      const seleccionado = extensionesData.find(
+        i => i.despacho === select.value
+      );
+      const resultado = document.getElementById('ext-resultado');
+      const numero = document.getElementById('ext-resultado-number');
+
+      if (seleccionado && resultado && numero) {
+        numero.textContent = seleccionado.extension;
+        resultado.style.display = 'flex';
+        resultado.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }
+    });
+  } catch (err) {
+    console.error('[EXTENSIONES] Error cargando:', err);
+  }
+}
+
+function copiarExtension() {
+  const numero = document.getElementById('ext-resultado-number');
+  const btn = document.getElementById('btn-copiar-ext');
+  if (!numero || !btn) return;
+
+  const ext = numero.textContent.trim();
+
+  navigator.clipboard.writeText(ext).then(() => {
+    btn.textContent = '✅ Extensión copiada';
+    btn.classList.add('copied');
+    setTimeout(() => {
+      btn.textContent = '📋 Copiar';
+      btn.classList.remove('copied');
+    }, 2000);
+  }).catch(() => {
+    const ta = document.createElement('textarea');
+    ta.value = ext;
+    ta.style.position = 'fixed';
+    ta.style.opacity = '0';
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+
+    btn.textContent = '✅ Extensión copiada';
+    btn.classList.add('copied');
+    setTimeout(() => {
+      btn.textContent = '📋 Copiar';
+      btn.classList.remove('copied');
+    }, 2000);
+  });
+}
+
+cargarExtensiones();
 
 // ===== AYUDAS ULTRA PRO MODAL =====
 const helpUltraModal = document.getElementById('help-ultra-modal');
@@ -612,40 +1054,3 @@ document.addEventListener('keydown', (e) => {
     closeHelpUltraModal();
   }
 });
-
-const uploadBtn = document.getElementById('upload-btn');
-
-if (uploadBtn) {
-  uploadBtn.addEventListener('click', async () => {
-    const ticket = document.getElementById('upload-ticket').value;
-    const fileInput = document.getElementById('upload-file');
-    const msg = document.getElementById('upload-msg');
-
-    if (!ticket || !fileInput.files.length) {
-      msg.textContent = 'Debe ingresar ticket y seleccionar archivo';
-      return;
-    }
-
-    const formData = new FormData();
-    formData.append('file', fileInput.files[0]);
-    formData.append('ticket', ticket);
-
-    try {
-      const res = await fetch('/api/upload', {
-        method: 'POST',
-        body: formData
-      });
-
-      const data = await res.json();
-
-      if (data.status === 'ok') {
-        msg.textContent = '✅ Archivo cargado correctamente';
-      } else {
-        msg.textContent = '❌ Error al subir archivo';
-      }
-    } catch (err) {
-      console.error(err);
-      msg.textContent = '❌ Error en la carga';
-    }
-  });
-}
