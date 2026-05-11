@@ -793,12 +793,10 @@ def exportar_tickets():
 
 @app.route('/api/admin', methods=['POST'])
 def admin_panel():
-
-    data = request.get_json(force=True)
-
-    user = data.get("username")
-    pwd = data.get("password")
-    action = data.get("action")
+    
+    user = request.form.get('username')
+    pwd = request.form.get('password')
+    action = request.form.get('action')
 
     print("USER:", user)
     print("PWD:", pwd)
