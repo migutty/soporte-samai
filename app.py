@@ -793,13 +793,10 @@ def exportar_tickets():
 
 @app.route('/api/admin', methods=['POST'])
 def admin_panel():
-    
+
     user = request.form.get('username')
     pwd = request.form.get('password')
     action = request.form.get('action')
-
-    print("USER:", user)
-    print("PWD:", pwd)
 
     if user != "admin" or pwd != "123456":
         return jsonify({
@@ -809,6 +806,7 @@ def admin_panel():
 
     role = "admin"
 
+    
     # ===== ESTADÍSTICAS =====
     if action == 'get_stats':
         conn = get_conn()
@@ -818,7 +816,7 @@ def admin_panel():
         conn.close()
 
         tickets = [dict(r) for r in rows]
-
+ 
         # Calcular tiempo de atención por ticket
         for t in tickets:
             t['tiempo_atencion'] = calcular_tiempo_atencion(t['ticket_id'])
