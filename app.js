@@ -473,11 +473,14 @@ if (adminLoginForm && adminUsernameInput && adminPasswordInput && adminLoginMsg 
     adminLoginMsg.style.display = 'none';
     adminLoginMsg.textContent = '';
 
-    adminDashboard.style.display = 'block';
+    const username = adminUsernameInput.value.trim();
+    const password = adminPasswordInput.value.trim();
 
-    loadAdminDashboard();
-  });
-}
+    if (!username || !password) {
+      adminLoginMsg.textContent = 'Ingresa usuario y contraseña.';
+      adminLoginMsg.style.display = 'flex';
+      return;
+    }
 
     try {
       const result = await adminPost({
@@ -493,7 +496,7 @@ if (adminLoginForm && adminUsernameInput && adminPasswordInput && adminLoginMsg 
           role: result.role
         };
         adminDashboard.style.display = 'block';
-        //loadAdminDashboard();
+        loadAdminDashboard();
       } else {
         adminLoginMsg.textContent = 'Credenciales incorrectas.';
         adminLoginMsg.style.display = 'flex';
