@@ -795,9 +795,9 @@ def exportar_tickets():
 def admin_panel():
     data = request.get_json()
 
-    user = data.get("username")
-    pwd = data.get("password")
-    action = data.get("action")
+    user = request.form.get('username')
+    pwd = request.form.get('password')
+    action = request.form.get('action')
 
     print("USER:", user)
     print("PWD:", pwd)
